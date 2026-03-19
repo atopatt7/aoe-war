@@ -1,130 +1,106 @@
 // ============================================================
-// GameScene：主要遊戲場景 ─ 完整整合版
-// 串接：UnitManager / CombatManager / EnergyManager /
-//       SpawnManager / UIManager
+// GameScene.ts — 完整整合版（含 SaveManager 永久存檔）
 // ============================================================
 import Phaser from 'phaser';
 import {
   GAME_WIDTH, GAME_HEIGHT, GROUND_Y,
   PLAYER_BASE_X, ENEMY_BASE_X, ERA_NAMES,
 } from '@/game/GameConfig';
-import { UnitManager } from '@/game/managers/UnitManager';
+import { UnitManager }   from '@/game/managers/UnitManager';
 import { CombatManager } from '@/game/managers/CombatManager';
 import { EnergyManager } from '@/game/managers/EnergyManager';
-import { SpawnManager } from '@/game/managers/SpawnManager';
-import { UIManager } from '@/game/managers/UIManager';
+import { SpawnManager }  from '@/game/managers/SpawnManager';
+import { UIManager }     from '@/game/managers/UIManager';
+import { SaveManager }   from '@/game/SaveManager';
 import type {
   PlayerSave, LevelData, BaseData, UnitData,
   UnitType, Era, Grade,
 } from '@/types/game';
 
-// 時代順序
 const ERA_ORDER: Era[] = ['stone', 'feudal', 'castle', 'modern', 'space'];
 
 export class GameScene extends Phaser.Scene {
-  // ── 傳入資料 ──
   private levelId!: number;
   private playerSave!: PlayerSave;
 
-  // ── 靜態資料 ──
   private levelData!: LevelData;
   private baseData!: BaseData;
   private allUnitsData: UnitData[] = [];
 
-  // ── 管理器 ──
   private unitManager!: UnitManager;
   private combatManager!: CombatManager;
   private energyManager!: EnergyManager;
   private spawnManager!: SpawnManager;
   private uiManager!: UIManager;
 
-  // ── 遊戲狀態 ──
   private playerBaseHp: number = 1000;
   private playerBaseMaxHp: number = 1000;
   private enemyBaseHp: number = 1000;
   private enemyBaseMaxHp: number = 1000;
-  private gold: number = 0;
+  private gold: number = 0;        // 本局獲得的金幣（未結算）
   private elapsedMs: number = 0;
   private isGameOver: boolean = false;
 
-  // ── 出兵冷卻（ms 時間戳） ──
   private unitCooldowns: Map<UnitType, number> = new Map([
     ['swordsman', 0], ['archer', 0], ['tank', 0], ['mage', 0],
   ]);
 
   private readonly UNIT_COOLDOWN_MS: Record<UnitType, number> = {
-    swordsman: 1000,
-    archer:    3000,
-    tank:      5000,
-    mage:      7000,
+    swordsman: 1000, archer: 3000, tank: 5000, mage: 7000,
   };
 
   private currentEra: Era = 'stone';
 
-  constructor() {
-    super({ key: 'GameScene' });
-  }
+  constructor() { super({ key: 'GameScene' }); }
 
   init(data: { levelId: number; playerSave: PlayerSave }): void {
     this.levelId    = data.levelId ?? 1;
-    this.playerSave = data.playerSave;
+    // 每次進場重新從 localStorage 讀取最新存檔，確保金幣正確
+    this.playerSave = SaveManager.load();
     this.isGameOver = false;
     this.elapsedMs  = 0;
+    this.gold       = 0;
     this.unitCooldowns = new Map([
       ['swordsman', 0], ['archer', 0], ['tank', 0], ['mage', 0],
     ]);
   }
 
-  // ─────────────────────────────────────────────
-  // create
-  // ─────────────────────────────────────────────
   async create(): Promise<void> {
     await this.loadAllData();
     this.initState();
-
     this.drawBackground();
     this.drawGround();
     this.drawBases();
 
-    // 建立管理器
     this.unitManager   = new UnitManager(this, this.allUnitsData);
     this.combatManager = new CombatManager(this.unitManager, this.levelData.goldPerKill);
     this.energyManager = new EnergyManager(
       this.getBaseConfig().maxEnergy,
       this.getBaseConfig().energyRegenInterval
     );
-    this.spawnManager  = new SpawnManager(this.unitManager, this.levelData);
-    this.uiManager     = new UIManager(this);
+    this.spawnManager = new SpawnManager(this.unitManager, this.levelData);
+    this.uiManager    = new UIManager(this);
 
-    // 建立 UI
     this.uiManager.create(
       this.levelId,
       this.levelData.enemyEra,
       (unitType) => this.trySpawnPlayerUnit(unitType)
     );
 
-    // 啟動敵人生成
     this.spawnManager.init(this.time.now);
 
-    // ESC
     this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
       .on('down', () => this.returnToMenu());
 
     this.showStartBanner();
   }
 
-  // ─────────────────────────────────────────────
-  // update（主迴圈）
-  // ─────────────────────────────────────────────
   update(time: number, delta: number): void {
     if (this.isGameOver) return;
-
     this.elapsedMs += delta;
 
-    // ① 能量回復
     this.energyManager.update(time);
 
-    // ② 單位移動
     const allAlive = this.unitManager.getAliveInstances();
     this.unitManager.updateAll(
       delta, allAlive,
@@ -132,20 +108,16 @@ export class GameScene extends Phaser.Scene {
       { x: ENEMY_BASE_X,  hp: this.enemyBaseHp  }
     );
 
-    // ③ 戰鬥結算
     const result = this.combatManager.update(time);
     this.gold += result.goldEarned;
-    if (result.playerBaseDamage > 0) {
-      this.playerBaseHp = Math.max(0, this.playerBaseHp - result.playerBaseDamage * (delta / 1000));
-    }
-    if (result.enemyBaseDamage > 0) {
-      this.enemyBaseHp = Math.max(0, this.enemyBaseHp - result.enemyBaseDamage * (delta / 1000));
-    }
 
-    // ④ 敵人生成
+    if (result.playerBaseDamage > 0)
+      this.playerBaseHp = Math.max(0, this.playerBaseHp - result.playerBaseDamage * (delta / 1000));
+    if (result.enemyBaseDamage > 0)
+      this.enemyBaseHp  = Math.max(0, this.enemyBaseHp  - result.enemyBaseDamage * (delta / 1000));
+
     this.spawnManager.update(time);
 
-    // ⑤ 更新 UI
     this.uiManager.update(
       this.energyManager.energy,
       this.energyManager.maxEnergy,
@@ -153,7 +125,7 @@ export class GameScene extends Phaser.Scene {
       this.playerBaseMaxHp,
       this.enemyBaseHp,
       this.enemyBaseMaxHp,
-      this.gold,
+      this.playerSave.gold + this.gold,  // 顯示「存檔金幣 + 本局已賺」
       this.elapsedMs,
       this.spawnManager.getProgress(),
       this.currentEra,
@@ -161,16 +133,12 @@ export class GameScene extends Phaser.Scene {
       time
     );
 
-    // ⑥ 勝負判定
     this.checkGameOver();
   }
 
-  // ─────────────────────────────────────────────
-  // 出兵邏輯
-  // ─────────────────────────────────────────────
+  // ─── 出兵 ───────────────────────────────────
   private trySpawnPlayerUnit(unitType: UnitType): void {
     if (this.isGameOver) return;
-
     const now = this.time.now;
     const cooldownUntil = this.unitCooldowns.get(unitType) ?? 0;
 
@@ -181,14 +149,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     const era = this.getPlayerUnitEra(unitType);
-    const maxEraIdx  = ERA_ORDER.indexOf(this.currentEra);
-    const unitEraIdx = ERA_ORDER.indexOf(era);
-
-    if (unitEraIdx > maxEraIdx) {
+    if (ERA_ORDER.indexOf(era) > ERA_ORDER.indexOf(this.currentEra)) {
       this.uiManager.showToast('需先升級主基地！', '#ff4444');
       return;
     }
-
     if (!this.energyManager.tryConsume(unitType, era)) {
       this.uiManager.showToast('能量不足！', '#ff4444');
       return;
@@ -198,10 +162,7 @@ export class GameScene extends Phaser.Scene {
       unitType, 'player', era,
       this.playerSave.unitUpgrades[unitType] ?? 0
     );
-
-    if (unit) {
-      this.unitCooldowns.set(unitType, now + this.UNIT_COOLDOWN_MS[unitType]);
-    }
+    if (unit) this.unitCooldowns.set(unitType, now + this.UNIT_COOLDOWN_MS[unitType]);
   }
 
   private getPlayerUnitEra(unitType: UnitType): Era {
@@ -209,9 +170,7 @@ export class GameScene extends Phaser.Scene {
     return ERA_ORDER[Math.min(4, Math.floor(lvl / 10))];
   }
 
-  // ─────────────────────────────────────────────
-  // 勝負判定
-  // ─────────────────────────────────────────────
+  // ─── 勝負判定 ───────────────────────────────
   private checkGameOver(): void {
     if (this.playerBaseHp <= 0) this.triggerGameOver(false);
     else if (this.enemyBaseHp <= 0) this.triggerGameOver(true);
@@ -221,8 +180,8 @@ export class GameScene extends Phaser.Scene {
     if (this.isGameOver) return;
     this.isGameOver = true;
 
-    const sec     = Math.floor(this.elapsedMs / 1000);
-    const hpPct   = Math.round((this.playerBaseHp / this.playerBaseMaxHp) * 100);
+    const sec   = Math.floor(this.elapsedMs / 1000);
+    const hpPct = Math.round((this.playerBaseHp / this.playerBaseMaxHp) * 100);
     const grade: Grade = isVictory
       ? CombatManager.calculateGrade(true, sec, hpPct, this.levelData.gradeConditions)
       : 'C';
@@ -232,11 +191,11 @@ export class GameScene extends Phaser.Scene {
       ? Math.floor(this.gold * multiplier)
       : Math.floor(this.gold * 0.5);
 
+    // ✅ 用 SaveManager 儲存，關視窗後仍保留
     if (isVictory) {
-      this.saveProgress(grade, finalGold);
+      this.playerSave = SaveManager.saveVictory(this.playerSave, this.levelId, finalGold, grade);
     } else {
-      this.playerSave.gold += finalGold;
-      this.savePlayerData();
+      this.playerSave = SaveManager.saveDefeat(this.playerSave, this.gold);
     }
 
     this.time.delayedCall(600, () => {
@@ -248,27 +207,7 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  private saveProgress(grade: Grade, goldEarned: number): void {
-    this.playerSave.gold += goldEarned;
-    const order: Grade[] = ['C', 'B', 'A', 'S'];
-    const prev = this.playerSave.levelGrades[this.levelId];
-    if (!prev || order.indexOf(grade) > order.indexOf(prev)) {
-      this.playerSave.levelGrades[this.levelId] = grade;
-    }
-    if (this.levelId >= this.playerSave.unlockedLevels) {
-      this.playerSave.unlockedLevels = Math.min(100, this.levelId + 1);
-    }
-    this.savePlayerData();
-  }
-
-  private savePlayerData(): void {
-    try { localStorage.setItem('aoewar_save', JSON.stringify(this.playerSave)); }
-    catch (e) { console.warn('存檔失敗', e); }
-  }
-
-  // ─────────────────────────────────────────────
-  // 資料載入
-  // ─────────────────────────────────────────────
+  // ─── 資料載入 ───────────────────────────────
   private async loadAllData(): Promise<void> {
     try {
       const [lRes, bRes, uRes] = await Promise.all([
@@ -291,7 +230,6 @@ export class GameScene extends Phaser.Scene {
     this.currentEra      = cfg.maxUnitEra as Era;
     this.enemyBaseMaxHp  = 800 + this.levelId * 80;
     this.enemyBaseHp     = this.enemyBaseMaxHp;
-    this.gold            = 0;
   }
 
   private getBaseConfig() {
@@ -302,111 +240,78 @@ export class GameScene extends Phaser.Scene {
     };
   }
 
-  // ─────────────────────────────────────────────
-  // 繪製背景
-  // ─────────────────────────────────────────────
+  // ─── 繪製場景 ───────────────────────────────
   private drawBackground(): void {
     const g   = this.add.graphics();
     const era = this.levelData?.enemyEra ?? 'stone';
     const pal: Record<string, [number, number]> = {
-      stone:  [0x87CEEB, 0xD4B896],
-      feudal: [0x5a8fbf, 0x7aad7a],
-      castle: [0x2e4a7a, 0x556b55],
-      modern: [0x1a1a3e, 0x2a2a5e],
+      stone:  [0x87CEEB, 0xD4B896], feudal: [0x5a8fbf, 0x7aad7a],
+      castle: [0x2e4a7a, 0x556b55], modern: [0x1a1a3e, 0x2a2a5e],
       space:  [0x000011, 0x08082a],
     };
     const [top, bot] = pal[era] ?? pal.stone;
-    const steps = 20;
-    for (let i = 0; i < steps; i++) {
-      const t = i / steps;
-      const lerp = (a: number, b: number) => Math.round(a + (b - a) * t);
-      const r  = lerp((top >> 16) & 0xff, (bot >> 16) & 0xff);
-      const gv = lerp((top >> 8)  & 0xff, (bot >> 8)  & 0xff);
-      const b  = lerp(top & 0xff, bot & 0xff);
+    for (let i = 0; i < 20; i++) {
+      const t  = i / 20;
+      const lp = (a: number, b: number) => Math.round(a + (b - a) * t);
+      const r  = lp((top >> 16) & 0xff, (bot >> 16) & 0xff);
+      const gv = lp((top >> 8)  & 0xff, (bot >> 8)  & 0xff);
+      const b  = lp(top & 0xff, bot & 0xff);
       g.fillStyle((r << 16) | (gv << 8) | b, 1);
-      g.fillRect(0, (GAME_HEIGHT * i) / steps, GAME_WIDTH, GAME_HEIGHT / steps + 1);
+      g.fillRect(0, (GAME_HEIGHT * i) / 20, GAME_WIDTH, GAME_HEIGHT / 20 + 1);
     }
-
-    // 裝飾
     if (era === 'space') {
       g.fillStyle(0xffffff, 1);
-      for (let i = 0; i < 80; i++) {
-        g.fillRect(Math.random() * GAME_WIDTH, Math.random() * GROUND_Y, 2, 2);
-      }
+      for (let i = 0; i < 80; i++) g.fillRect(Math.random() * GAME_WIDTH, Math.random() * GROUND_Y, 2, 2);
     } else {
       g.fillStyle(0xffffff, 0.8);
-      [[120, 55], [380, 45], [680, 68], [950, 50], [1150, 62]].forEach(([cx, cy]) => {
-        g.fillEllipse(cx, cy, 56, 18);
-        g.fillEllipse(cx - 20, cy + 7, 38, 14);
-        g.fillEllipse(cx + 20, cy + 7, 38, 14);
+      [[120,55],[380,45],[680,68],[950,50],[1150,62]].forEach(([cx,cy]) => {
+        g.fillEllipse(cx,cy,56,18); g.fillEllipse(cx-20,cy+7,38,14); g.fillEllipse(cx+20,cy+7,38,14);
       });
     }
   }
 
   private drawGround(): void {
     const g = this.add.graphics();
-    g.fillStyle(0x3d7a34, 1);
-    g.fillRect(0, GROUND_Y + 8, GAME_WIDTH, 16);
-    g.fillStyle(0x5c4a1e, 1);
-    g.fillRect(0, GROUND_Y + 24, GAME_WIDTH, GAME_HEIGHT - GROUND_Y - 24);
-    g.lineStyle(1, 0x888888, 0.15);
-    g.lineBetween(GAME_WIDTH / 2, GROUND_Y + 8, GAME_WIDTH / 2, GAME_HEIGHT);
+    g.fillStyle(0x3d7a34, 1); g.fillRect(0, GROUND_Y + 8, GAME_WIDTH, 16);
+    g.fillStyle(0x5c4a1e, 1); g.fillRect(0, GROUND_Y + 24, GAME_WIDTH, GAME_HEIGHT - GROUND_Y - 24);
+    g.lineStyle(1, 0x888888, 0.15); g.lineBetween(GAME_WIDTH / 2, GROUND_Y + 8, GAME_WIDTH / 2, GAME_HEIGHT);
   }
 
   private drawBases(): void {
-    const g    = this.add.graphics();
+    const g = this.add.graphics();
     const baseY = GROUND_Y + 8;
+    const px = PLAYER_BASE_X, ex = ENEMY_BASE_X;
 
-    // ── 玩家基地（藍）──
-    const px = PLAYER_BASE_X;
-    g.fillStyle(0x2244aa, 1);
-    g.fillRect(px - 45, baseY - 110, 90, 118);
-    g.fillStyle(0x1a3388, 1);
-    for (let row = 0; row < 6; row++)
-      for (let col = 0; col < 3; col++)
-        g.fillRect(px - 42 + col * 30 + (row % 2 === 0 ? 0 : 15), baseY - 106 + row * 18, 26, 14);
-    g.fillStyle(0x3355cc, 1);
-    for (let i = 0; i < 5; i++) g.fillRect(px - 44 + i * 20, baseY - 124, 12, 16);
-    g.fillStyle(0x111133, 1);
-    g.fillRect(px - 14, baseY - 50, 28, 58);
-    g.fillStyle(0x4499ff, 1);
-    g.fillRect(px + 2, baseY - 145, 3, 35);
-    g.fillTriangle(px + 5, baseY - 145, px + 5, baseY - 128, px + 22, baseY - 137);
-    this.add.text(px, baseY - 158, '我方基地', { fontSize: '10px', color: '#88aaff' }).setOrigin(0.5);
+    // 玩家基地
+    g.fillStyle(0x2244aa,1); g.fillRect(px-45,baseY-110,90,118);
+    g.fillStyle(0x1a3388,1);
+    for(let r=0;r<6;r++) for(let c=0;c<3;c++) g.fillRect(px-42+c*30+(r%2===0?0:15),baseY-106+r*18,26,14);
+    g.fillStyle(0x3355cc,1);
+    for(let i=0;i<5;i++) g.fillRect(px-44+i*20,baseY-124,12,16);
+    g.fillStyle(0x111133,1); g.fillRect(px-14,baseY-50,28,58);
+    g.fillStyle(0x4499ff,1); g.fillRect(px+2,baseY-145,3,35);
+    g.fillTriangle(px+5,baseY-145,px+5,baseY-128,px+22,baseY-137);
+    this.add.text(px,baseY-158,'我方基地',{fontSize:'10px',color:'#88aaff'}).setOrigin(0.5);
 
-    // ── 敵方基地（紅）──
-    const ex = ENEMY_BASE_X;
-    g.fillStyle(0xaa2222, 1);
-    g.fillRect(ex - 45, baseY - 110, 90, 118);
-    g.fillStyle(0x881818, 1);
-    for (let row = 0; row < 6; row++)
-      for (let col = 0; col < 3; col++)
-        g.fillRect(ex - 42 + col * 30 + (row % 2 === 0 ? 0 : 15), baseY - 106 + row * 18, 26, 14);
-    g.fillStyle(0xcc3333, 1);
-    for (let i = 0; i < 5; i++) g.fillRect(ex - 44 + i * 20, baseY - 124, 12, 16);
-    g.fillStyle(0x330000, 1);
-    g.fillRect(ex - 14, baseY - 50, 28, 58);
-    g.fillStyle(0xff4444, 1);
-    g.fillRect(ex - 5, baseY - 145, 3, 35);
-    g.fillTriangle(ex - 5, baseY - 145, ex - 5, baseY - 128, ex - 22, baseY - 137);
-    this.add.text(ex, baseY - 158, '敵方基地', { fontSize: '10px', color: '#ff8888' }).setOrigin(0.5);
+    // 敵方基地
+    g.fillStyle(0xaa2222,1); g.fillRect(ex-45,baseY-110,90,118);
+    g.fillStyle(0x881818,1);
+    for(let r=0;r<6;r++) for(let c=0;c<3;c++) g.fillRect(ex-42+c*30+(r%2===0?0:15),baseY-106+r*18,26,14);
+    g.fillStyle(0xcc3333,1);
+    for(let i=0;i<5;i++) g.fillRect(ex-44+i*20,baseY-124,12,16);
+    g.fillStyle(0x330000,1); g.fillRect(ex-14,baseY-50,28,58);
+    g.fillStyle(0xff4444,1); g.fillRect(ex-5,baseY-145,3,35);
+    g.fillTriangle(ex-5,baseY-145,ex-5,baseY-128,ex-22,baseY-137);
+    this.add.text(ex,baseY-158,'敵方基地',{fontSize:'10px',color:'#ff8888'}).setOrigin(0.5);
   }
 
   private showStartBanner(): void {
-    const { width, height } = this.cameras.main;
+    const {width,height} = this.cameras.main;
     const era = this.levelData?.enemyEra ?? 'stone';
-    const ov  = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.65).setDepth(500);
-    const t1  = this.add.text(width / 2, height / 2 - 40, `第 ${this.levelId} 關`, {
-      fontSize: '44px', color: '#FFD700', fontStyle: 'bold',
-      stroke: '#000000', strokeThickness: 4,
-    }).setOrigin(0.5).setDepth(501);
-    const t2  = this.add.text(width / 2, height / 2 + 16, `${ERA_NAMES[era]} 敵軍來襲！`, {
-      fontSize: '20px', color: '#ffffff', stroke: '#000000', strokeThickness: 3,
-    }).setOrigin(0.5).setDepth(501);
-    this.tweens.add({
-      targets: [ov, t1, t2], alpha: 0, delay: 1400, duration: 700,
-      onComplete: () => { ov.destroy(); t1.destroy(); t2.destroy(); },
-    });
+    const ov = this.add.rectangle(width/2,height/2,width,height,0x000000,0.65).setDepth(500);
+    const t1 = this.add.text(width/2,height/2-40,`第 ${this.levelId} 關`,{fontSize:'44px',color:'#FFD700',fontStyle:'bold',stroke:'#000000',strokeThickness:4}).setOrigin(0.5).setDepth(501);
+    const t2 = this.add.text(width/2,height/2+16,`${ERA_NAMES[era]} 敵軍來襲！`,{fontSize:'20px',color:'#ffffff',stroke:'#000000',strokeThickness:3}).setOrigin(0.5).setDepth(501);
+    this.tweens.add({targets:[ov,t1,t2],alpha:0,delay:1400,duration:700,onComplete:()=>{ov.destroy();t1.destroy();t2.destroy();}});
   }
 
   private returnToMenu(): void {

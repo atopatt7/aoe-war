@@ -1,26 +1,17 @@
 // ============================================================
-// GameCanvas：React 元件，負責掛載 Phaser 遊戲實例
-// 使用動態 import 避免 SSR 問題（Phaser 需要瀏覽器環境）
+// GameCanvas.tsx — 全螢幕容器，Phaser 自動縮放至任何裝置
 // ============================================================
 'use client';
-
 import { useEffect, useRef } from 'react';
 
-interface GameCanvasProps {
-  className?: string;
-}
-
-export default function GameCanvas({ className = '' }: GameCanvasProps) {
+export default function GameCanvas() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const gameRef = useRef<any>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (gameRef.current) return;
+    if (typeof window === 'undefined' || gameRef.current) return;
 
     const initGame = async () => {
-      // 動態 import 避免 SSR 報錯
       const Phaser           = (await import('phaser')).default;
       const { BootScene }    = await import('@/game/scenes/BootScene');
       const { MenuScene }    = await import('@/game/scenes/MenuScene');
@@ -30,12 +21,10 @@ export default function GameCanvas({ className = '' }: GameCanvasProps) {
 
       const config = createGameConfig([BootScene, MenuScene, GameScene, UpgradeScene]);
 
-      const game = new Phaser.Game({
+      gameRef.current = new Phaser.Game({
         ...config,
         parent: 'phaser-container',
       });
-
-      gameRef.current = game;
     };
 
     initGame().catch(console.error);
@@ -51,16 +40,19 @@ export default function GameCanvas({ className = '' }: GameCanvasProps) {
   return (
     <div
       id="phaser-container"
-      ref={containerRef}
-      className={className}
       style={{
-        width: '1280px',
-        height: '400px',
-        margin: '0 auto',
-        border: '2px solid #333366',
-        borderRadius: '8px',
+        // 佔滿整個視窗
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
         overflow: 'hidden',
-        boxShadow: '0 0 30px rgba(100, 100, 255, 0.3)',
+        backgroundColor: '#0d0d1a',
+        // Phaser 的 canvas 會自動置中
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     />
   );

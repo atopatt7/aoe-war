@@ -1,0 +1,4170 @@
+[
+  {
+    "id": 1,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 2,
+        "interval": 3.98
+      }
+    ],
+    "goldPerKill": 1,
+    "timeLimit": 123,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 55,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 69,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 83,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 2,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 2,
+        "interval": 3.96
+      }
+    ],
+    "goldPerKill": 2,
+    "timeLimit": 126,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 57,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 72,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 86,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 3,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 2,
+        "interval": 3.94
+      }
+    ],
+    "goldPerKill": 3,
+    "timeLimit": 129,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 59,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 74,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 89,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 4,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 2,
+        "interval": 3.92
+      }
+    ],
+    "goldPerKill": 4,
+    "timeLimit": 132,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 61,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 76,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 91,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 5,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 3,
+        "interval": 3.9
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 2,
+        "interval": 4.9
+      }
+    ],
+    "goldPerKill": 5,
+    "timeLimit": 135,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 63,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 78,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 94,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 6,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 3,
+        "interval": 3.88
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 2,
+        "interval": 4.88
+      }
+    ],
+    "goldPerKill": 6,
+    "timeLimit": 138,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 64,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 81,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 97,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 7,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 3,
+        "interval": 3.86
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 2,
+        "interval": 4.86
+      }
+    ],
+    "goldPerKill": 7,
+    "timeLimit": 141,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 66,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 83,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 99,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 8,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 3,
+        "interval": 3.84
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 2,
+        "interval": 4.84
+      }
+    ],
+    "goldPerKill": 8,
+    "timeLimit": 144,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 68,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 85,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 102,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 9,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 3,
+        "interval": 3.82
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 2,
+        "interval": 4.82
+      }
+    ],
+    "goldPerKill": 9,
+    "timeLimit": 147,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 70,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 87,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 105,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 10,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 4,
+        "interval": 3.8
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 3,
+        "interval": 4.8
+      }
+    ],
+    "goldPerKill": 10,
+    "timeLimit": 150,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 72,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 90,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 108,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 11,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 4,
+        "interval": 3.78
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 3,
+        "interval": 4.78
+      }
+    ],
+    "goldPerKill": 11,
+    "timeLimit": 153,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 73,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 92,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 110,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 12,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 4,
+        "interval": 3.76
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 3,
+        "interval": 4.76
+      }
+    ],
+    "goldPerKill": 12,
+    "timeLimit": 156,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 75,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 94,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 113,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 13,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 4,
+        "interval": 3.74
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 3,
+        "interval": 4.74
+      }
+    ],
+    "goldPerKill": 13,
+    "timeLimit": 159,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 77,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 96,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 116,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 14,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 4,
+        "interval": 3.7199999999999998
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 3,
+        "interval": 4.72
+      }
+    ],
+    "goldPerKill": 14,
+    "timeLimit": 162,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 79,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 99,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 118,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 15,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 5,
+        "interval": 3.7
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 4,
+        "interval": 4.7
+      }
+    ],
+    "goldPerKill": 15,
+    "timeLimit": 165,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 81,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 101,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 121,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 16,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 5,
+        "interval": 3.68
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 4,
+        "interval": 4.68
+      }
+    ],
+    "goldPerKill": 16,
+    "timeLimit": 168,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 82,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 103,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 124,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 17,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 5,
+        "interval": 3.66
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 4,
+        "interval": 4.66
+      }
+    ],
+    "goldPerKill": 17,
+    "timeLimit": 171,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 84,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 105,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 126,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 18,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 5,
+        "interval": 3.64
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 4,
+        "interval": 4.64
+      }
+    ],
+    "goldPerKill": 18,
+    "timeLimit": 174,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 86,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 108,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 129,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 19,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 5,
+        "interval": 3.62
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 4,
+        "interval": 4.62
+      }
+    ],
+    "goldPerKill": 19,
+    "timeLimit": 177,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 88,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 110,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 132,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 20,
+    "enemyEra": "stone",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 6,
+        "interval": 3.6
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 5,
+        "interval": 4.6
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.4
+      }
+    ],
+    "goldPerKill": 20,
+    "timeLimit": 180,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 90,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 112,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 135,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 21,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 6,
+        "interval": 3.58
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 5,
+        "interval": 4.58
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.37
+      }
+    ],
+    "goldPerKill": 21,
+    "timeLimit": 183,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 91,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 114,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 137,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 22,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 6,
+        "interval": 3.56
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 5,
+        "interval": 4.56
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.34
+      }
+    ],
+    "goldPerKill": 22,
+    "timeLimit": 186,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 93,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 117,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 140,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 23,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 6,
+        "interval": 3.54
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 5,
+        "interval": 4.54
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.3100000000000005
+      }
+    ],
+    "goldPerKill": 23,
+    "timeLimit": 189,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 95,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 119,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 143,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 24,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 6,
+        "interval": 3.52
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 5,
+        "interval": 4.52
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.28
+      }
+    ],
+    "goldPerKill": 24,
+    "timeLimit": 192,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 97,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 121,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 145,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 25,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 7,
+        "interval": 3.5
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 6,
+        "interval": 4.5
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.25
+      }
+    ],
+    "goldPerKill": 25,
+    "timeLimit": 195,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 99,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 123,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 148,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 26,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 7,
+        "interval": 3.48
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 6,
+        "interval": 4.48
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.22
+      }
+    ],
+    "goldPerKill": 26,
+    "timeLimit": 198,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 100,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 126,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 151,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 27,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 7,
+        "interval": 3.46
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 6,
+        "interval": 4.46
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.19
+      }
+    ],
+    "goldPerKill": 27,
+    "timeLimit": 201,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 102,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 128,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 153,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 28,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 7,
+        "interval": 3.44
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 6,
+        "interval": 4.4399999999999995
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.16
+      }
+    ],
+    "goldPerKill": 28,
+    "timeLimit": 204,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 104,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 130,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 156,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 29,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 7,
+        "interval": 3.42
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 6,
+        "interval": 4.42
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 3,
+        "interval": 6.13
+      }
+    ],
+    "goldPerKill": 29,
+    "timeLimit": 207,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 106,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 132,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 159,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 30,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "swordsman",
+        "count": 8,
+        "interval": 3.4
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 7,
+        "interval": 4.4
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 6.1
+      }
+    ],
+    "goldPerKill": 30,
+    "timeLimit": 210,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 108,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 135,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 162,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 31,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 8,
+        "interval": 3.38
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 7,
+        "interval": 4.38
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 6.07
+      }
+    ],
+    "goldPerKill": 31,
+    "timeLimit": 213,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 109,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 137,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 164,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 32,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 8,
+        "interval": 3.36
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 7,
+        "interval": 4.36
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 6.04
+      }
+    ],
+    "goldPerKill": 32,
+    "timeLimit": 216,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 111,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 139,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 167,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 33,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 8,
+        "interval": 3.34
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 7,
+        "interval": 4.34
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 6.01
+      }
+    ],
+    "goldPerKill": 33,
+    "timeLimit": 219,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 113,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 141,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 170,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 34,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 8,
+        "interval": 3.32
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 7,
+        "interval": 4.32
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.98
+      }
+    ],
+    "goldPerKill": 34,
+    "timeLimit": 222,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 115,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 144,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 172,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 35,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 9,
+        "interval": 3.3
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 8,
+        "interval": 4.3
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.95
+      }
+    ],
+    "goldPerKill": 35,
+    "timeLimit": 225,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 117,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 146,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 175,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 36,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 9,
+        "interval": 3.2800000000000002
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 8,
+        "interval": 4.28
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.92
+      }
+    ],
+    "goldPerKill": 36,
+    "timeLimit": 228,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 118,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 148,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 178,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 37,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 9,
+        "interval": 3.26
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 8,
+        "interval": 4.26
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.890000000000001
+      }
+    ],
+    "goldPerKill": 37,
+    "timeLimit": 231,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 120,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 150,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 180,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 38,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 9,
+        "interval": 3.24
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 8,
+        "interval": 4.24
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.86
+      }
+    ],
+    "goldPerKill": 38,
+    "timeLimit": 234,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 122,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 153,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 183,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 39,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 9,
+        "interval": 3.2199999999999998
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 8,
+        "interval": 4.22
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 4,
+        "interval": 5.83
+      }
+    ],
+    "goldPerKill": 39,
+    "timeLimit": 237,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 124,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 155,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 186,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 40,
+    "enemyEra": "feudal",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 10,
+        "interval": 3.2
+      },
+      {
+        "delay": 15,
+        "unitType": "archer",
+        "count": 9,
+        "interval": 4.2
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.8
+      }
+    ],
+    "goldPerKill": 40,
+    "timeLimit": 240,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 126,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 157,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 189,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 41,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 10,
+        "interval": 3.1799999999999997
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 9,
+        "interval": 4.18
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.77
+      }
+    ],
+    "goldPerKill": 41,
+    "timeLimit": 243,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 127,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 159,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 191,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 42,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 10,
+        "interval": 3.16
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 9,
+        "interval": 4.16
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.74
+      }
+    ],
+    "goldPerKill": 42,
+    "timeLimit": 246,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 129,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 162,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 194,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 43,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 10,
+        "interval": 3.14
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 9,
+        "interval": 4.14
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.71
+      }
+    ],
+    "goldPerKill": 43,
+    "timeLimit": 249,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 131,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 164,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 197,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 44,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 10,
+        "interval": 3.12
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 9,
+        "interval": 4.12
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.68
+      }
+    ],
+    "goldPerKill": 44,
+    "timeLimit": 252,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 133,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 166,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 199,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 45,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 11,
+        "interval": 3.1
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.1
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.65
+      }
+    ],
+    "goldPerKill": 45,
+    "timeLimit": 255,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 135,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 168,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 202,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 46,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 11,
+        "interval": 3.08
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.08
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.62
+      }
+    ],
+    "goldPerKill": 46,
+    "timeLimit": 258,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 136,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 171,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 205,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 47,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 11,
+        "interval": 3.06
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.06
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.59
+      }
+    ],
+    "goldPerKill": 47,
+    "timeLimit": 261,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 138,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 173,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 207,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 48,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 11,
+        "interval": 3.04
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.04
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.5600000000000005
+      }
+    ],
+    "goldPerKill": 48,
+    "timeLimit": 264,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 140,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 175,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 210,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 49,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 11,
+        "interval": 3.02
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.02
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 5,
+        "interval": 5.53
+      }
+    ],
+    "goldPerKill": 49,
+    "timeLimit": 267,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 142,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 177,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 213,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 50,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.0
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 4.0
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.5
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.5
+      }
+    ],
+    "goldPerKill": 50,
+    "timeLimit": 270,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 144,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 180,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 216,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 51,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 2.98
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.98
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.47
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.49
+      }
+    ],
+    "goldPerKill": 51,
+    "timeLimit": 273,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 145,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 182,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 218,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 52,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 2.96
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.96
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.4399999999999995
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.48
+      }
+    ],
+    "goldPerKill": 52,
+    "timeLimit": 276,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 147,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 184,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 221,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 53,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 2.94
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.94
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.41
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.4699999999999998
+      }
+    ],
+    "goldPerKill": 53,
+    "timeLimit": 279,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 149,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 186,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 224,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 54,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 2.92
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.92
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.38
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.46
+      }
+    ],
+    "goldPerKill": 54,
+    "timeLimit": 282,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 151,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 189,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 226,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 55,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 13,
+        "interval": 2.9
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.9
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.35
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.45
+      }
+    ],
+    "goldPerKill": 55,
+    "timeLimit": 285,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 153,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 191,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 229,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 56,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 13,
+        "interval": 2.88
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.88
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.32
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.44
+      }
+    ],
+    "goldPerKill": 56,
+    "timeLimit": 288,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 154,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 193,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 232,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 57,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 13,
+        "interval": 2.86
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.86
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.29
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.4299999999999997
+      }
+    ],
+    "goldPerKill": 57,
+    "timeLimit": 291,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 156,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 195,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 234,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 58,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 13,
+        "interval": 2.84
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.84
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.26
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.42
+      }
+    ],
+    "goldPerKill": 58,
+    "timeLimit": 294,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 158,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 198,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 237,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 59,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 13,
+        "interval": 2.8200000000000003
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.8200000000000003
+      },
+      {
+        "delay": 30,
+        "unitType": "tank",
+        "count": 6,
+        "interval": 5.23
+      },
+      {
+        "delay": 50,
+        "unitType": "tank",
+        "count": 12,
+        "interval": 3.41
+      }
+    ],
+    "goldPerKill": 59,
+    "timeLimit": 297,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 160,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 200,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 240,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 60,
+    "enemyEra": "castle",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "tank",
+        "count": 14,
+        "interval": 2.8
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.8
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.2
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.4
+      }
+    ],
+    "goldPerKill": 60,
+    "timeLimit": 300,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 162,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 202,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 243,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 61,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 14,
+        "interval": 2.7800000000000002
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.7800000000000002
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.17
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.39
+      }
+    ],
+    "goldPerKill": 61,
+    "timeLimit": 303,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 163,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 204,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 245,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 62,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 14,
+        "interval": 2.76
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.76
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.140000000000001
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.38
+      }
+    ],
+    "goldPerKill": 62,
+    "timeLimit": 306,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 165,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 207,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 248,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 63,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 14,
+        "interval": 2.74
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.74
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.11
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.37
+      }
+    ],
+    "goldPerKill": 63,
+    "timeLimit": 309,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 167,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 209,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 251,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 64,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 14,
+        "interval": 2.7199999999999998
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.7199999999999998
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.08
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.36
+      }
+    ],
+    "goldPerKill": 64,
+    "timeLimit": 312,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 169,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 211,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 253,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 65,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.7
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.7
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.05
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.35
+      }
+    ],
+    "goldPerKill": 65,
+    "timeLimit": 315,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 171,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 213,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 256,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 66,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.6799999999999997
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.6799999999999997
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 5.02
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.34
+      }
+    ],
+    "goldPerKill": 66,
+    "timeLimit": 318,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 172,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 216,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 259,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 67,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.66
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.66
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 4.99
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.33
+      }
+    ],
+    "goldPerKill": 67,
+    "timeLimit": 321,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 174,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 218,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 261,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 68,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.6399999999999997
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.6399999999999997
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 4.96
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.32
+      }
+    ],
+    "goldPerKill": 68,
+    "timeLimit": 324,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 176,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 220,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 264,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 69,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.62
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.62
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 7,
+        "interval": 4.93
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.31
+      }
+    ],
+    "goldPerKill": 69,
+    "timeLimit": 327,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 178,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 222,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 267,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 70,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.5999999999999996
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.5999999999999996
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.9
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.3
+      }
+    ],
+    "goldPerKill": 70,
+    "timeLimit": 330,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 180,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 225,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 270,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 71,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.58
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.58
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.87
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.29
+      }
+    ],
+    "goldPerKill": 71,
+    "timeLimit": 333,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 181,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 227,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 272,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 72,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.56
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.56
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.84
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.2800000000000002
+      }
+    ],
+    "goldPerKill": 72,
+    "timeLimit": 336,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 183,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 229,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 275,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 73,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.54
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.54
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.8100000000000005
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.27
+      }
+    ],
+    "goldPerKill": 73,
+    "timeLimit": 339,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 185,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 231,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 278,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 74,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.52
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.52
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.78
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.26
+      }
+    ],
+    "goldPerKill": 74,
+    "timeLimit": 342,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 187,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 234,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 280,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 75,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.5
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.5
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.75
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.25
+      }
+    ],
+    "goldPerKill": 75,
+    "timeLimit": 345,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 189,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 236,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 283,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 76,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.48
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.48
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.720000000000001
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.24
+      }
+    ],
+    "goldPerKill": 76,
+    "timeLimit": 348,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 190,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 238,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 286,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 77,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.46
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.46
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.6899999999999995
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.23
+      }
+    ],
+    "goldPerKill": 77,
+    "timeLimit": 351,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 192,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 240,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 288,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 78,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.44
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.44
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.66
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.2199999999999998
+      }
+    ],
+    "goldPerKill": 78,
+    "timeLimit": 354,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 194,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 243,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 291,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 79,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.42
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.42
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.63
+      },
+      {
+        "delay": 50,
+        "unitType": "mage",
+        "count": 12,
+        "interval": 3.21
+      }
+    ],
+    "goldPerKill": 79,
+    "timeLimit": 357,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 196,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 245,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 294,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 80,
+    "enemyEra": "modern",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.4
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.4
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.6
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.2
+      }
+    ],
+    "goldPerKill": 80,
+    "timeLimit": 360,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 198,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 247,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 297,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 81,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.38
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.38
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.57
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.19
+      }
+    ],
+    "goldPerKill": 81,
+    "timeLimit": 363,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 199,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 249,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 299,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 82,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.36
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.36
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.54
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.1799999999999997
+      }
+    ],
+    "goldPerKill": 82,
+    "timeLimit": 366,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 201,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 252,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 302,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 83,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.34
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.34
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.51
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.17
+      }
+    ],
+    "goldPerKill": 83,
+    "timeLimit": 369,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 203,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 254,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 305,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 84,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.3200000000000003
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.3200000000000003
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.48
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.16
+      }
+    ],
+    "goldPerKill": 84,
+    "timeLimit": 372,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 205,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 256,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 307,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 85,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.3
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.3
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.45
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.15
+      }
+    ],
+    "goldPerKill": 85,
+    "timeLimit": 375,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 207,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 258,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 310,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 86,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.2800000000000002
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.2800000000000002
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.42
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.14
+      }
+    ],
+    "goldPerKill": 86,
+    "timeLimit": 378,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 208,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 261,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 313,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 87,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.26
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.26
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.390000000000001
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.13
+      }
+    ],
+    "goldPerKill": 87,
+    "timeLimit": 381,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 210,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 263,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 315,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 88,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.24
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.24
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.36
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.12
+      }
+    ],
+    "goldPerKill": 88,
+    "timeLimit": 384,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 212,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 265,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 318,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 89,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.2199999999999998
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.2199999999999998
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.33
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.11
+      }
+    ],
+    "goldPerKill": 89,
+    "timeLimit": 387,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 214,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 267,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 321,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 90,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.2
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.2
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.300000000000001
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.1
+      }
+    ],
+    "goldPerKill": 90,
+    "timeLimit": 390,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 216,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 270,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 324,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 91,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.1799999999999997
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.1799999999999997
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.27
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.09
+      }
+    ],
+    "goldPerKill": 91,
+    "timeLimit": 393,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 217,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 272,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 326,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 92,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.16
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.16
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.24
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.08
+      }
+    ],
+    "goldPerKill": 92,
+    "timeLimit": 396,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 219,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 274,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 329,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 93,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.1399999999999997
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.1399999999999997
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.21
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.07
+      }
+    ],
+    "goldPerKill": 93,
+    "timeLimit": 399,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 221,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 276,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 332,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 94,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.12
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.12
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.18
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.06
+      }
+    ],
+    "goldPerKill": 94,
+    "timeLimit": 402,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 223,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 279,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 334,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 95,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.0999999999999996
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.0999999999999996
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.15
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.05
+      }
+    ],
+    "goldPerKill": 95,
+    "timeLimit": 405,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 225,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 281,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 337,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 96,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.08
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.08
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.12
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.04
+      }
+    ],
+    "goldPerKill": 96,
+    "timeLimit": 408,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 226,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 283,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 340,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 97,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.06
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.06
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.09
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.0300000000000002
+      }
+    ],
+    "goldPerKill": 97,
+    "timeLimit": 411,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 228,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 285,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 342,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 98,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.04
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.04
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.0600000000000005
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.02
+      }
+    ],
+    "goldPerKill": 98,
+    "timeLimit": 414,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 230,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 288,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 345,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 99,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.02
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.02
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.03
+      },
+      {
+        "delay": 50,
+        "unitType": "swordsman",
+        "count": 12,
+        "interval": 3.01
+      }
+    ],
+    "goldPerKill": 99,
+    "timeLimit": 417,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 232,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 290,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 348,
+        "minBaseHpPercent": 40
+      }
+    }
+  },
+  {
+    "id": 100,
+    "enemyEra": "space",
+    "waves": [
+      {
+        "delay": 3,
+        "unitType": "archer",
+        "count": 15,
+        "interval": 2.0
+      },
+      {
+        "delay": 15,
+        "unitType": "mage",
+        "count": 10,
+        "interval": 3.0
+      },
+      {
+        "delay": 30,
+        "unitType": "mage",
+        "count": 8,
+        "interval": 4.0
+      },
+      {
+        "delay": 50,
+        "unitType": "archer",
+        "count": 12,
+        "interval": 3.0
+      }
+    ],
+    "goldPerKill": 100,
+    "timeLimit": 420,
+    "gradeConditions": {
+      "S": {
+        "maxTime": 234,
+        "minBaseHpPercent": 80
+      },
+      "A": {
+        "maxTime": 292,
+        "minBaseHpPercent": 60
+      },
+      "B": {
+        "maxTime": 351,
+        "minBaseHpPercent": 40
+      }
+    }
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "comment": "兵種資料 - 所有數值從此讀取，不寫死在程式中",
+  "units": [
+    {
+      "id": "swordsman",
+      "name": "劍士",
+      "description": "近戰輸出，速度快，單體傷害高",
+      "cost": [1, 2, 4, 6, 8],
+      "cooldown": 1,
+      "attackCooldown": 1.2,
+      "stats": {
+        "stone":  { "hp": 120,  "attack": 18,  "speed": 90,  "range": 45,  "isAreaAttack": false },
+        "feudal": { "hp": 280,  "attack": 38,  "speed": 100, "range": 48,  "isAreaAttack": false },
+        "castle": { "hp": 600,  "attack": 80,  "speed": 110, "range": 50,  "isAreaAttack": false },
+        "modern": { "hp": 1200, "attack": 160, "speed": 120, "range": 52,  "isAreaAttack": false },
+        "space":  { "hp": 2800, "attack": 380, "speed": 135, "range": 55,  "isAreaAttack": false }
+      }
+    },
+    {
+      "id": "archer",
+      "name": "弓箭手",
+      "description": "遠程單體攻擊，可在安全距離輸出",
+      "cost": [3, 5, 7, 10, 14],
+      "cooldown": 3,
+      "attackCooldown": 1.8,
+      "stats": {
+        "stone":  { "hp": 80,   "attack": 22,  "speed": 70,  "range": 180, "isAreaAttack": false },
+        "feudal": { "hp": 180,  "attack": 50,  "speed": 78,  "range": 200, "isAreaAttack": false },
+        "castle": { "hp": 380,  "attack": 105, "speed": 85,  "range": 220, "isAreaAttack": false },
+        "modern": { "hp": 780,  "attack": 210, "speed": 92,  "range": 250, "isAreaAttack": false },
+        "space":  { "hp": 1800, "attack": 500, "speed": 100, "range": 280, "isAreaAttack": false }
+      }
+    },
+    {
+      "id": "tank",
+      "name": "肉盾",
+      "description": "超高血量，行動緩慢，保護後方部隊",
+      "cost": [5, 8, 12, 18, 25],
+      "cooldown": 5,
+      "attackCooldown": 2.5,
+      "stats": {
+        "stone":  { "hp": 600,  "attack": 10,  "speed": 45,  "range": 40,  "isAreaAttack": false },
+        "feudal": { "hp": 1400, "attack": 22,  "speed": 50,  "range": 42,  "isAreaAttack": false },
+        "castle": { "hp": 3000, "attack": 45,  "speed": 55,  "range": 44,  "isAreaAttack": false },
+        "modern": { "hp": 6500, "attack": 90,  "speed": 60,  "range": 46,  "isAreaAttack": false },
+        "space":  { "hp":15000, "attack": 200, "speed": 65,  "range": 48,  "isAreaAttack": false }
+      }
+    },
+    {
+      "id": "mage",
+      "name": "法師",
+      "description": "範圍傷害，費用高，適合清群",
+      "cost": [7, 10, 15, 22, 30],
+      "cooldown": 7,
+      "attackCooldown": 3.0,
+      "stats": {
+        "stone":  { "hp": 70,   "attack": 35,  "speed": 60,  "range": 140, "isAreaAttack": true },
+        "feudal": { "hp": 160,  "attack": 80,  "speed": 68,  "range": 160, "isAreaAttack": true },
+        "castle": { "hp": 340,  "attack": 170, "speed": 75,  "range": 180, "isAreaAttack": true },
+        "modern": { "hp": 700,  "attack": 340, "speed": 82,  "range": 200, "isAreaAttack": true },
+        "space":  { "hp": 1600, "attack": 800, "speed": 90,  "range": 220, "isAreaAttack": true }
+      }
+    }
+  ]
+}

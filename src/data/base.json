@@ -1,0 +1,85 @@
+{
+  "comment": "主基地升級資料 - 基地等級決定能量上限、回復速度、可用最高時代",
+  "levels": [
+    {
+      "level": 1,
+      "hp": 1000,
+      "maxEnergy": 10,
+      "energyRegenInterval": 10,
+      "maxUnitEra": "stone",
+      "upgradeCost": 0
+    },
+    {
+      "level": 2,
+      "hp": 1200,
+      "maxEnergy": 12,
+      "energyRegenInterval": 9,
+      "maxUnitEra": "stone",
+      "upgradeCost": 80
+    },
+    {
+      "level": 3,
+      "hp": 1500,
+      "maxEnergy": 14,
+      "energyRegenInterval": 8,
+      "maxUnitEra": "feudal",
+      "upgradeCost": 200
+    },
+    {
+      "level": 4,
+      "hp": 1800,
+      "maxEnergy": 16,
+      "energyRegenInterval": 7,
+      "maxUnitEra": "feudal",
+      "upgradeCost": 400
+    },
+    {
+      "level": 5,
+      "hp": 2200,
+      "maxEnergy": 18,
+      "energyRegenInterval": 6,
+      "maxUnitEra": "castle",
+      "upgradeCost": 700
+    },
+    {
+      "level": 6,
+      "hp": 2700,
+      "maxEnergy": 20,
+      "energyRegenInterval": 5,
+      "maxUnitEra": "castle",
+      "upgradeCost": 1100
+    },
+    {
+      "level": 7,
+      "hp": 3300,
+      "maxEnergy": 22,
+      "energyRegenInterval": 5,
+      "maxUnitEra": "modern",
+      "upgradeCost": 1600
+    },
+    {
+      "level": 8,
+      "hp": 4000,
+      "maxEnergy": 25,
+      "energyRegenInterval": 4,
+      "maxUnitEra": "modern",
+      "upgradeCost": 2200
+    },
+    {
+      "level": 9,
+      "hp": 5000,
+      "maxEnergy": 28,
+      "energyRegenInterval": 4,
+      "maxUnitEra": "space",
+      "upgradeCost": 3000
+    },
+    {
+      "level": 10,
+      "hp": 6500,
+      "maxEnergy": 30,
+      "energyRegenInterval": 3,
+      "maxUnitEra": "space",
+      "upgradeCost": 4000
+    }
+  ]
+}

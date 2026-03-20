@@ -38,11 +38,12 @@ const UNIT_BUTTON_CONFIG: Array<{
 
 const BTN_W = 120;
 const BTN_H = 72;
-const BTN_Y = GAME_HEIGHT - 38;
+// 按鈕往上移 22px，避開 iOS 底部 Home 指示列
+const BTN_Y = GAME_HEIGHT - 60;
 
 // 能量條參數
 const EX = 20;
-const EY = GAME_HEIGHT - 82;
+const EY = GAME_HEIGHT - 104;
 const EW = 200;
 const EH = 16;
 
@@ -198,7 +199,8 @@ export class UIManager {
   // ─────────────────────────────────────────────
   private createUnitButtons(): void {
     // 底部背景
-    this.scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 38, GAME_WIDTH, BTN_H + 12, 0x000000, 0.85)
+    // 背景加高至底部，完全蓋住 iOS Home 指示列下方空白
+    this.scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 45, GAME_WIDTH, BTN_H + 56, 0x000000, 0.85)
       .setDepth(50);
 
     const totalWidth = UNIT_BUTTON_CONFIG.length * (BTN_W + 10) - 10;

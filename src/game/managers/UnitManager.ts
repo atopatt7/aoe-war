@@ -1,52 +1,42 @@
 // ============================================================
 // UnitManager：單位生成、移動、繪製管理器
-// 負責所有單位的生命週期（玩家 + 敵人）
+// ✅ 改用精靈圖 (Phaser.GameObjects.Sprite) 顯示角色
 // ============================================================
 import Phaser from 'phaser';
 import { GROUND_Y, PLAYER_BASE_X, ENEMY_BASE_X, ERA_INDEX } from '@/game/GameConfig';
 import type { UnitData, UnitInstance, UnitType, Era, Faction } from '@/types/game';
 
-// ── 單位視覺設定（依兵種） ──────────────────────────────────
-const UNIT_VISUAL: Record<UnitType, {
-  color: number;         // 玩家色
-  enemyColor: number;    // 敵人色
-  shape: 'warrior' | 'archer' | 'tank' | 'mage'; // 繪製形狀
-  width: number;
-  height: number;
-}> = {
-  swordsman: { color: 0x4488ff, enemyColor: 0xff4444, shape: 'warrior', width: 28, height: 38 },
-  archer:    { color: 0x44cc44, enemyColor: 0xff8800, shape: 'archer',  width: 24, height: 34 },
-  tank:      { color: 0x8888ff, enemyColor: 0xff6688, shape: 'tank',    width: 38, height: 48 },
-  mage:      { color: 0xcc44ff, enemyColor: 0xffcc00, shape: 'mage',    width: 26, height: 40 },
-};
+// ── 精靈縮放與錨點 ────────────────────────────────────────
+const SPRITE_SCALE   = 0.28;          // 512px → ~143px
+const SPRITE_ORIGIN_Y = 0.86;         // 腳在精靈圖 86% 處
+const HP_BAR_ABOVE   = 66;            // HP 條距離地面的像素
+const HP_BAR_W       = 52;
+const LABEL_ABOVE    = 80;
 
-// 時代顏色加成（讓不同時代單位有明顯差異）
-const ERA_TINT: Record<Era, number> = {
-  stone:  0xffffff,
-  feudal: 0xddffdd,
-  castle: 0xddddff,
-  modern: 0xffffdd,
-  space:  0xffddff,
+// ── 後備視覺設定（精靈載入失敗時用） ─────────────────────
+const UNIT_VISUAL: Record<UnitType, {
+  color: number; enemyColor: number;
+  width: number; height: number;
+}> = {
+  swordsman: { color: 0x4488ff, enemyColor: 0xff4444, width: 28, height: 38 },
+  archer:    { color: 0x44cc44, enemyColor: 0xff8800, width: 24, height: 34 },
+  tank:      { color: 0x8888ff, enemyColor: 0xff6688, width: 38, height: 48 },
+  mage:      { color: 0xcc44ff, enemyColor: 0xffcc00, width: 26, height: 40 },
 };
 
 // ── 單位 GameObject 容器 ────────────────────────────────────
 interface UnitGameObject {
   instance: UnitInstance;
-  graphics: Phaser.GameObjects.Graphics;
+  sprite: Phaser.GameObjects.Sprite;
   hpBarBg: Phaser.GameObjects.Rectangle;
   hpBar: Phaser.GameObjects.Rectangle;
   label: Phaser.GameObjects.Text;
-  attackEffect?: Phaser.GameObjects.Graphics; // 攻擊特效
 }
 
 export class UnitManager {
   private scene: Phaser.Scene;
   private unitsData: Map<UnitType, UnitData>;
-
-  /** 所有場上單位（key = 唯一ID） */
   private unitObjects: Map<string, UnitGameObject> = new Map();
-
-  /** 用於生成唯一ID */
   private idCounter: number = 0;
 
   constructor(scene: Phaser.Scene, unitsData: UnitData[]) {
@@ -64,39 +54,27 @@ export class UnitManager {
     upgradeLevel: number = 0
   ): UnitInstance | null {
     const data = this.unitsData.get(unitType);
-    if (!data) {
-      console.warn(`找不到兵種資料：${unitType}`);
-      return null;
-    }
+    if (!data) { console.warn(`找不到兵種資料：${unitType}`); return null; }
 
     const stats = data.stats[era];
-    if (!stats) {
-      console.warn(`找不到時代數值：${unitType} / ${era}`);
-      return null;
-    }
+    if (!stats) { console.warn(`找不到時代數值：${unitType} / ${era}`); return null; }
 
-    // 依升級次數計算數值加成（每級 +3%）
     const bonusRate = 1 + upgradeLevel * 0.03;
 
-    // 決定生成位置（城堡「內側」出生，走出城堡後才遇敵）
-    // 城堡半寬約 45px；出生在城堡後方，避免出兵時直接被城門外的敵人打到
     const spawnX = faction === 'player'
-      ? PLAYER_BASE_X - 30   // x ≈ 50，藏在城牆後
-      : ENEMY_BASE_X + 30;   // x ≈ 1230，藏在敵城牆後
+      ? PLAYER_BASE_X - 30
+      : ENEMY_BASE_X  + 30;
 
-    // 建立 UnitInstance
     const instance: UnitInstance = {
       id: `unit_${++this.idCounter}`,
-      unitType,
-      faction,
-      era,
+      unitType, faction, era,
       currentHp: Math.round(stats.hp * bonusRate),
-      maxHp: Math.round(stats.hp * bonusRate),
-      attack: Math.round(stats.attack * bonusRate),
-      speed: stats.speed,
-      range: stats.range,
+      maxHp:     Math.round(stats.hp * bonusRate),
+      attack:    Math.round(stats.attack * bonusRate),
+      speed:     stats.speed,
+      range:     stats.range,
       isAreaAttack: stats.isAreaAttack,
-      attackCooldown: data.attackCooldown * 1000, // 轉換為 ms
+      attackCooldown: data.attackCooldown * 1000,
       lastAttackTime: 0,
       x: spawnX,
       y: GROUND_Y,
@@ -104,164 +82,83 @@ export class UnitManager {
       targetId: null,
     };
 
-    // 建立視覺元素
-    this.createUnitGraphics(instance);
-
+    this.createUnitSprite(instance);
     return instance;
   }
 
   // ─────────────────────────────────────────────
-  // 建立單位視覺元素
+  // 建立精靈及 HP 條
   // ─────────────────────────────────────────────
-  private createUnitGraphics(instance: UnitInstance): void {
-    const visual = UNIT_VISUAL[instance.unitType];
-    const color = instance.faction === 'player' ? visual.color : visual.enemyColor;
-    const w = visual.width;
-    const h = visual.height;
+  private createUnitSprite(instance: UnitInstance): void {
+    const idleKey = `${instance.era}_${instance.unitType}_idle`;
+    const isPlayer = instance.faction === 'player';
 
-    // ── 主體 Graphics ──
-    const graphics = this.scene.add.graphics();
-    this.drawUnitBody(graphics, instance, color, w, h);
+    // 如果精靈圖已載入就用，否則建立一個後備 Graphics Sprite
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hasTexture = (this.scene as any).textures.exists(idleKey);
 
-    // ── 血量條背景 ──
-    const hpBarBg = this.scene.add.rectangle(instance.x, instance.y - h / 2 - 14, w, 5, 0x333333);
-    hpBarBg.setOrigin(0.5);
-
-    // ── 血量條 ──
-    const hpBarColor = instance.faction === 'player' ? 0x44ff44 : 0xff4444;
-    const hpBar = this.scene.add.rectangle(instance.x - w / 2, instance.y - h / 2 - 14, w, 5, hpBarColor);
-    hpBar.setOrigin(0, 0.5);
-
-    // ── 兵種標籤 ──
-    const eraSymbol = ['⬡', '⚔', '🏰', '⚙', '🚀'][ERA_INDEX[instance.era] ?? 0];
-    const label = this.scene.add.text(instance.x, instance.y - h / 2 - 22, eraSymbol, {
-      fontSize: '10px',
-      color: instance.faction === 'player' ? '#aaddff' : '#ffaaaa',
-    }).setOrigin(0.5);
-
-    const obj: UnitGameObject = { instance, graphics, hpBarBg, hpBar, label };
-    this.unitObjects.set(instance.id, obj);
-  }
-
-  // ─────────────────────────────────────────────
-  // 依兵種繪製不同形狀的身體
-  // ─────────────────────────────────────────────
-  private drawUnitBody(
-    g: Phaser.GameObjects.Graphics,
-    instance: UnitInstance,
-    color: number,
-    w: number,
-    h: number
-  ): void {
-    const x = instance.x;
-    const y = instance.y;
-    const shape = UNIT_VISUAL[instance.unitType].shape;
-
-    g.clear();
-
-    // 身體陰影
-    g.fillStyle(0x000000, 0.3);
-    g.fillEllipse(x, y + 4, w * 0.9, 10);
-
-    // 主體
-    g.fillStyle(color, 1);
-
-    switch (shape) {
-      case 'warrior':
-        // 矩形身體 + 三角頭盔
-        g.fillRect(x - w / 2, y - h / 2, w, h * 0.7);       // 身體
-        g.fillTriangle(                                         // 頭盔
-          x - w / 2, y - h / 2,
-          x + w / 2, y - h / 2,
-          x, y - h / 2 - 10
-        );
-        // 武器（右手劍）
-        g.lineStyle(3, 0xdddddd, 1);
-        g.lineBetween(x + w / 2, y - h / 4, x + w / 2 + 14, y - h / 2 - 6);
-        // 盾（左手）
-        g.fillStyle(0xaaaacc, 1);
-        g.fillRect(x - w / 2 - 8, y - h / 4, 8, 16);
-        break;
-
-      case 'archer':
-        // 細長身體 + 圓頭
-        g.fillRect(x - w / 2, y - h / 2 + 8, w, h * 0.6);
-        g.fillCircle(x, y - h / 2 + 8, w / 2.5);             // 頭
-        // 弓
-        g.lineStyle(2, 0x886633, 1);
-        g.strokeCircle(x + w / 2 + 4, y - h / 4, 10);
-        // 箭
-        g.lineStyle(1, 0xcccc88, 1);
-        g.lineBetween(x + w / 2, y - h / 4, x + w / 2 + 18, y - h / 4);
-        break;
-
-      case 'tank':
-        // 寬大方形 + 圓角
-        g.fillRoundedRect(x - w / 2, y - h / 2, w, h * 0.75, 4);
-        // 盾牌（前方）
-        g.fillStyle(0xcccccc, 1);
-        if (instance.faction === 'player') {
-          g.fillRect(x + w / 2, y - h / 2, 12, h * 0.6);
-        } else {
-          g.fillRect(x - w / 2 - 12, y - h / 2, 12, h * 0.6);
-        }
-        // 頭
-        g.fillStyle(color, 1);
-        g.fillCircle(x, y - h / 2, w / 2.5);
-        break;
-
-      case 'mage':
-        // 圓錐形法袍 + 帽子
-        g.fillTriangle(
-          x - w / 2, y,
-          x + w / 2, y,
-          x, y - h * 0.7
-        );
-        // 法杖
-        g.lineStyle(2, 0x886633, 1);
-        if (instance.faction === 'player') {
-          g.lineBetween(x + w / 2 - 2, y, x + w / 2 + 6, y - h * 0.8);
-        } else {
-          g.lineBetween(x - w / 2 + 2, y, x - w / 2 - 6, y - h * 0.8);
-        }
-        // 法杖頂端發光
-        g.fillStyle(0x00ffff, 1);
-        if (instance.faction === 'player') {
-          g.fillCircle(x + w / 2 + 6, y - h * 0.8, 5);
-        } else {
-          g.fillCircle(x - w / 2 - 6, y - h * 0.8, 5);
-        }
-        // 帽子
-        g.fillStyle(color, 1);
-        g.fillTriangle(
-          x - w / 3, y - h * 0.6,
-          x + w / 3, y - h * 0.6,
-          x, y - h
-        );
-        break;
+    let sprite: Phaser.GameObjects.Sprite;
+    if (hasTexture) {
+      sprite = this.scene.add.sprite(instance.x, instance.y, idleKey);
+      sprite.setScale(SPRITE_SCALE);
+      sprite.setOrigin(0.5, SPRITE_ORIGIN_Y);
+      // 敵方單位左右翻轉（面向左）
+      if (!isPlayer) sprite.setFlipX(true);
+    } else {
+      // 後備：用 Graphics 產生一個簡單色塊
+      const visual = UNIT_VISUAL[instance.unitType];
+      const color  = isPlayer ? visual.color : visual.enemyColor;
+      const rt = this.scene.add.renderTexture(instance.x, instance.y, visual.width, visual.height);
+      rt.fill(color, 1);
+      // 轉成 Sprite（用 fallback key）
+      sprite = this.scene.add.sprite(instance.x, instance.y, '__DEFAULT');
+      sprite.setAlpha(0); // 隱藏佔位
+      rt.destroy();
+      // 直接用 Graphics 畫（最簡單後備）
+      const g = this.scene.add.graphics();
+      const w = visual.width, h = visual.height;
+      g.fillStyle(color, 1);
+      g.fillRect(instance.x - w/2, instance.y - h, w, h);
+      // 不存入 unitObjects（會在 syncGraphicsPosition 重繪）
     }
 
-    // 陣營方向標記（小箭頭）
-    g.fillStyle(instance.faction === 'player' ? 0x88aaff : 0xffaaaa, 0.8);
-    const arrowDir = instance.faction === 'player' ? 1 : -1;
-    g.fillTriangle(
-      x + arrowDir * (w / 2 + 4), y - h / 4,
-      x + arrowDir * (w / 2 + 4), y - h / 4 + 8,
-      x + arrowDir * (w / 2 + 12), y - h / 4 + 4
-    );
+    sprite.setDepth(30);
+
+    // ── HP 條 ──────────────────────────────────
+    const hpBarBg = this.scene.add.rectangle(
+      instance.x, instance.y - HP_BAR_ABOVE, HP_BAR_W, 5, 0x333333
+    ).setOrigin(0.5).setDepth(31);
+
+    const hpBarColor = isPlayer ? 0x44ff44 : 0xff4444;
+    const hpBar = this.scene.add.rectangle(
+      instance.x - HP_BAR_W / 2, instance.y - HP_BAR_ABOVE, HP_BAR_W, 5, hpBarColor
+    ).setOrigin(0, 0.5).setDepth(32);
+
+    // ── 時代標籤 ───────────────────────────────
+    const eraSymbol = ['⬡', '⚔', '🏰', '⚙', '🚀'][ERA_INDEX[instance.era] ?? 0];
+    const label = this.scene.add.text(
+      instance.x, instance.y - LABEL_ABOVE, eraSymbol, {
+        fontSize: '10px',
+        color: isPlayer ? '#aaddff' : '#ffaaaa',
+      }
+    ).setOrigin(0.5).setDepth(33);
+
+    this.unitObjects.set(instance.id, { instance, sprite, hpBarBg, hpBar, label });
   }
 
   // ─────────────────────────────────────────────
   // 更新所有單位（每幀呼叫）
   // ─────────────────────────────────────────────
-  updateAll(delta: number, enemies: UnitInstance[], playerBase: { x: number; hp: number }, enemyBase: { x: number; hp: number }): void {
-    for (const [id, obj] of this.unitObjects) {
+  updateAll(
+    delta: number,
+    enemies: UnitInstance[],
+    playerBase: { x: number; hp: number },
+    enemyBase:  { x: number; hp: number }
+  ): void {
+    for (const obj of this.unitObjects.values()) {
       if (obj.instance.state === 'dead') continue;
-
-      const isPlayer = obj.instance.faction === 'player';
       const targets = enemies.filter(e => e.faction !== obj.instance.faction && e.state !== 'dead');
-      const targetBase = isPlayer ? enemyBase : playerBase;
-
+      const targetBase = obj.instance.faction === 'player' ? enemyBase : playerBase;
       this.updateUnit(obj, targets, targetBase, delta);
     }
   }
@@ -277,31 +174,74 @@ export class UnitManager {
   ): void {
     const inst = obj.instance;
     const isPlayer = inst.faction === 'player';
-    const moveDir = isPlayer ? 1 : -1;
+    const moveDir  = isPlayer ? 1 : -1;
 
-    // ① 攻城模式：原地停止，不切換目標、不移動
-    //    敵方單位仍可攻擊本單位（死亡邏輯由 CombatManager 處理）
     if (inst.targetId === 'ENEMY_BASE' || inst.targetId === 'PLAYER_BASE') {
-      this.syncGraphicsPosition(obj);
+      this.syncSpritePosition(obj);
       return;
     }
 
-    // ② 找到最近的敵人
     const nearest = this.findNearestEnemy(inst, enemies);
 
     if (nearest && Math.abs(nearest.x - inst.x) <= inst.range) {
-      // ③ 敵人在射程內 → 停止並攻擊
-      inst.state = 'attacking';
+      inst.state    = 'attacking';
       inst.targetId = nearest.id;
     } else {
-      // ④ 繼續前進
-      inst.state = 'moving';
+      inst.state    = 'moving';
       inst.targetId = null;
       inst.x += inst.speed * moveDir * (delta / 1000);
     }
 
-    // ④ 更新視覺位置
-    this.syncGraphicsPosition(obj);
+    this.syncSpritePosition(obj);
+  }
+
+  // ─────────────────────────────────────────────
+  // 同步精靈位置 + 動畫狀態
+  // ─────────────────────────────────────────────
+  private syncSpritePosition(obj: UnitGameObject): void {
+    const inst = obj.instance;
+    const sp   = obj.sprite;
+
+    sp.setPosition(inst.x, inst.y);
+
+    // ── 動畫切換 ─────────────────────────────
+    const idleKey   = `${inst.era}_${inst.unitType}_idle`;
+    const attackKey = `${inst.era}_${inst.unitType}_attack`;
+
+    if (inst.state === 'attacking') {
+      // 若動畫存在且沒有在播，就播攻擊動畫
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sceneAnims = (this.scene as any).anims;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const spAnims = (sp as any).anims;
+      if (sceneAnims.exists(attackKey) && !spAnims.isPlaying) {
+        sp.play(attackKey);
+        sp.once('animationcomplete', () => {
+          if (inst.state !== 'dead') {
+            sp.setTexture(idleKey);
+          }
+        });
+      }
+    } else {
+      // 移動中 → 顯示 idle（若目前不是已在播攻擊動畫）
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const spAnims2 = (sp as any).anims;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (!spAnims2.isPlaying && (this.scene as any).textures.exists(idleKey)) {
+        if (sp.texture.key !== idleKey) {
+          sp.setTexture(idleKey);
+        }
+      }
+    }
+
+    // ── HP 條 ─────────────────────────────────
+    const hpRatio = Math.max(0, inst.currentHp / inst.maxHp);
+    obj.hpBarBg.setPosition(inst.x, inst.y - HP_BAR_ABOVE);
+    obj.hpBar.setPosition(inst.x - HP_BAR_W / 2, inst.y - HP_BAR_ABOVE);
+    obj.hpBar.width = HP_BAR_W * hpRatio;
+
+    // ── 標籤 ──────────────────────────────────
+    obj.label.setPosition(inst.x, inst.y - LABEL_ABOVE);
   }
 
   // ─────────────────────────────────────────────
@@ -310,41 +250,12 @@ export class UnitManager {
   findNearestEnemy(inst: UnitInstance, enemies: UnitInstance[]): UnitInstance | null {
     let nearest: UnitInstance | null = null;
     let minDist = Infinity;
-
     for (const e of enemies) {
       if (e.state === 'dead') continue;
       const dist = Math.abs(e.x - inst.x);
-      if (dist < minDist) {
-        minDist = dist;
-        nearest = e;
-      }
+      if (dist < minDist) { minDist = dist; nearest = e; }
     }
     return nearest;
-  }
-
-  // ─────────────────────────────────────────────
-  // 同步 Graphics 位置
-  // ─────────────────────────────────────────────
-  private syncGraphicsPosition(obj: UnitGameObject): void {
-    const inst = obj.instance;
-    const visual = UNIT_VISUAL[inst.unitType];
-    const color = inst.faction === 'player' ? visual.color : visual.enemyColor;
-    const w = visual.width;
-    const h = visual.height;
-
-    // 重繪在新位置
-    this.drawUnitBody(obj.graphics, inst, color, w, h);
-
-    // 更新 HP 條位置
-    obj.hpBarBg.setPosition(inst.x, inst.y - h / 2 - 14);
-    obj.hpBar.setPosition(inst.x - w / 2, inst.y - h / 2 - 14);
-
-    // 更新 HP 條寬度
-    const hpRatio = Math.max(0, inst.currentHp / inst.maxHp);
-    obj.hpBar.width = w * hpRatio;
-
-    // 更新標籤位置
-    obj.label.setPosition(inst.x, inst.y - h / 2 - 22);
   }
 
   // ─────────────────────────────────────────────
@@ -353,38 +264,28 @@ export class UnitManager {
   showDamageNumber(x: number, y: number, damage: number, isAreaAttack: boolean): void {
     const color = isAreaAttack ? '#ff88ff' : '#ffff44';
     const text = this.scene.add.text(x, y - 20, `-${damage}`, {
-      fontSize: isAreaAttack ? '16px' : '14px',
-      color,
-      fontStyle: 'bold',
-      stroke: '#000000',
-      strokeThickness: 3,
+      fontSize: isAreaAttack ? '16px' : '14px', color,
+      fontStyle: 'bold', stroke: '#000000', strokeThickness: 3,
     }).setOrigin(0.5).setDepth(200);
 
     this.scene.tweens.add({
-      targets: text,
-      y: y - 50,
-      alpha: 0,
-      duration: 800,
-      ease: 'Power2',
+      targets: text, y: y - 50, alpha: 0, duration: 800, ease: 'Power2',
       onComplete: () => text.destroy(),
     });
   }
 
   // ─────────────────────────────────────────────
-  // 顯示攻擊特效（連線）
+  // 顯示攻擊特效
   // ─────────────────────────────────────────────
   showAttackEffect(attacker: UnitInstance, target: UnitInstance): void {
-    const g = this.scene.add.graphics();
-    g.setDepth(150);
+    const g = this.scene.add.graphics().setDepth(150);
 
     if (attacker.isAreaAttack) {
-      // 範圍爆炸特效
       g.fillStyle(0xff88ff, 0.5);
       g.fillCircle(target.x, target.y - 20, 40);
       g.lineStyle(2, 0xff44ff, 1);
       g.strokeCircle(target.x, target.y - 20, 40);
     } else {
-      // 單體攻擊（直線）
       const color = attacker.unitType === 'archer' ? 0xcccc44
                   : attacker.unitType === 'mage'   ? 0x00ffff
                   : 0xffffff;
@@ -392,11 +293,8 @@ export class UnitManager {
       g.lineBetween(attacker.x, attacker.y - 20, target.x, target.y - 20);
     }
 
-    // 快速淡出
     this.scene.tweens.add({
-      targets: g,
-      alpha: 0,
-      duration: 180,
+      targets: g, alpha: 0, duration: 180,
       onComplete: () => g.destroy(),
     });
   }
@@ -407,7 +305,6 @@ export class UnitManager {
   removeUnit(id: string): void {
     const obj = this.unitObjects.get(id);
     if (!obj) return;
-
     obj.instance.state = 'dead';
 
     // 死亡特效
@@ -415,50 +312,30 @@ export class UnitManager {
     g.fillStyle(0xff4400, 0.8);
     g.fillCircle(obj.instance.x, obj.instance.y - 20, 20);
     this.scene.tweens.add({
-      targets: g,
-      scaleX: 2, scaleY: 2, alpha: 0,
-      duration: 300,
+      targets: g, scaleX: 2, scaleY: 2, alpha: 0, duration: 300,
       onComplete: () => g.destroy(),
     });
 
-    // 銷毀 GameObjects
-    obj.graphics.destroy();
+    obj.sprite.destroy();
     obj.hpBarBg.destroy();
     obj.hpBar.destroy();
     obj.label.destroy();
-
     this.unitObjects.delete(id);
   }
 
   // ─────────────────────────────────────────────
-  // 取得所有活躍單位的 instance 列表
+  // 取得單位列表
   // ─────────────────────────────────────────────
   getAliveInstances(): UnitInstance[] {
     return Array.from(this.unitObjects.values())
-      .map(o => o.instance)
-      .filter(i => i.state !== 'dead');
+      .map(o => o.instance).filter(i => i.state !== 'dead');
   }
+  getPlayerUnits(): UnitInstance[] { return this.getAliveInstances().filter(i => i.faction === 'player'); }
+  getEnemyUnits():  UnitInstance[] { return this.getAliveInstances().filter(i => i.faction === 'enemy'); }
+  getInstance(id: string): UnitInstance | undefined { return this.unitObjects.get(id)?.instance; }
 
-  /** 玩家單位列表 */
-  getPlayerUnits(): UnitInstance[] {
-    return this.getAliveInstances().filter(i => i.faction === 'player');
-  }
-
-  /** 敵人單位列表 */
-  getEnemyUnits(): UnitInstance[] {
-    return this.getAliveInstances().filter(i => i.faction === 'enemy');
-  }
-
-  /** 依 ID 取得 instance */
-  getInstance(id: string): UnitInstance | undefined {
-    return this.unitObjects.get(id)?.instance;
-  }
-
-  /** 清空所有單位 */
   clearAll(): void {
-    for (const id of this.unitObjects.keys()) {
-      this.removeUnit(id);
-    }
+    for (const id of [...this.unitObjects.keys()]) this.removeUnit(id);
     this.unitObjects.clear();
   }
 }

@@ -93,7 +93,7 @@ export class GameScene extends Phaser.Scene {
     this.combatManager = new CombatManager(this.unitManager, this.levelData?.goldPerKill ?? 10);
     this.energyManager = new EnergyManager(
       this.getBaseConfig().maxEnergy,
-      this.getBaseConfig().energyRegenInterval
+      this.getBaseConfig().regenPerSec
     );
     this.spawnManager = new SpawnManager(this.unitManager, this.levelData);
     this.uiManager    = new UIManager(this);
@@ -116,7 +116,7 @@ export class GameScene extends Phaser.Scene {
     if (this.isGameOver) return;
     this.elapsedMs += delta;
 
-    this.energyManager.update(time);
+    this.energyManager.update(time, delta);
 
     const allAlive = this.unitManager.getAliveInstances();
     this.unitManager.updateAll(
@@ -138,6 +138,7 @@ export class GameScene extends Phaser.Scene {
     this.uiManager.update(
       this.energyManager.energy,
       this.energyManager.maxEnergy,
+      this.energyManager.regenProgress,
       this.playerBaseHp,
       this.playerBaseMaxHp,
       this.enemyBaseHp,
@@ -242,7 +243,7 @@ export class GameScene extends Phaser.Scene {
     return {
       hp: hpCfg.hp,
       maxEnergy: capCfg.maxEnergy,
-      energyRegenInterval: regCfg.regenIntervalSec,
+      regenPerSec: regCfg.regenPerSec,
       maxUnitEra: hpCfg.maxUnitEra,
     };
   }

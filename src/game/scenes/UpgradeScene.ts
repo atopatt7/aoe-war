@@ -135,10 +135,14 @@ export class UpgradeScene extends Phaser.Scene {
     const toNextLabel = isMaxLevel ? '已達最高等級' : eraIdx < 4 ? `再升 ${10 - inEraLv} 次 → ${ERA_NAMES[ERA_ORDER[eraIdx + 1]]}` : '已達最高時代';
     this.contentContainer.add(this.add.text(W / 2, TOP + 90, toNextLabel, { fontSize: '12px', color: '#FFD700' }).setOrigin(0.5).setDepth(21));
 
-    // 數值對比
-    const stats     = unitData.stats[currentEra];
-    const nextEra   = ERA_ORDER[Math.min(4, Math.floor(nextLv / 10))];
-    const nextStats = unitData.stats[nextEra];
+    // 數值對比（套用每升級 +3% 的 bonusRate）
+    const bonusRate     = 1 + currentLv * 0.03;
+    const nextBonusRate = 1 + nextLv    * 0.03;
+    const nextEra       = ERA_ORDER[Math.min(4, Math.floor(nextLv / 10))];
+    const baseStats     = unitData.stats[currentEra];
+    const nextBaseStats = unitData.stats[nextEra];
+    const stats     = { hp: Math.round(baseStats.hp * bonusRate), attack: Math.round(baseStats.attack * bonusRate), speed: baseStats.speed };
+    const nextStats = { hp: Math.round(nextBaseStats.hp * nextBonusRate), attack: Math.round(nextBaseStats.attack * nextBonusRate), speed: nextBaseStats.speed };
     const statY = TOP + 130;
     [['📊 當前數值', W / 2 - 160], ['📈 升級後', W / 2 + 60]].forEach(([t, x]) => this.contentContainer.add(this.add.text(x as number, statY, t as string, { fontSize: '13px', color: '#aaaaff' }).setDepth(21)));
     [['HP', stats.hp, nextStats?.hp], ['攻擊', stats.attack, nextStats?.attack], ['速度', stats.speed, nextStats?.speed]].forEach(([lbl, cur, nxt], i) => {
@@ -236,10 +240,10 @@ export class UpgradeScene extends Phaser.Scene {
     const curReg  = BASE_REGEN_UPGRADES.find(l => l.level === regLv)!;
     const nextReg = BASE_REGEN_UPGRADES.find(l => l.level === regLv + 1);
     cards.push({
-      icon: '🔄', title: '能量回速', subtitle: '縮短每點能量回復時間',
-      currentVal: `${curReg.regenIntervalSec}秒/點`,
-      nextVal: nextReg ? `${nextReg.regenIntervalSec}秒/點` : '—',
-      lv: regLv, maxLv: 8, cost: nextReg?.cost ?? 0,
+      icon: '🔄', title: '能量回速', subtitle: '每升一級 +0.2 能量/秒',
+      currentVal: `${curReg.regenPerSec.toFixed(1)}/秒`,
+      nextVal: nextReg ? `${nextReg.regenPerSec.toFixed(1)}/秒` : '—',
+      lv: regLv, maxLv: 11, cost: nextReg?.cost ?? 0,
       stat: 'regen', color: 0x152a15, strokeColor: 0x44ff88,
     });
 

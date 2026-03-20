@@ -1,6 +1,7 @@
 // ============================================================
 // EnergyManager：能量系統
 // 管理能量回復、消耗、上限
+// ✅ 改為每秒速率制：regenPerSec 每秒回復的能量量
 // ============================================================
 import type { UnitType, Era } from '@/types/game';
 
@@ -20,30 +21,33 @@ const ERA_TO_INDEX: Record<Era, number> = {
 export class EnergyManager {
   private current: number;
   private max: number;
-  private regenInterval: number; // ms
-  private lastRegenTime: number;
+  private regenPerSec: number; // 每秒回復能量量（可為小數）
+  private regenAccum: number;  // 積累的未整數能量
 
-  constructor(maxEnergy: number, regenIntervalSec: number) {
+  constructor(maxEnergy: number, regenPerSec: number) {
     this.max = maxEnergy;
     this.current = maxEnergy;
-    this.regenInterval = regenIntervalSec * 1000;
-    this.lastRegenTime = 0;
+    this.regenPerSec = regenPerSec;
+    this.regenAccum = 0;
   }
 
   // ─────────────────────────────────────────────
   // 每幀更新（能量回復）
+  // delta: 本幀毫秒數
   // ─────────────────────────────────────────────
-  update(currentTime: number): void {
-    if (this.lastRegenTime === 0) {
-      this.lastRegenTime = currentTime;
+  update(_currentTime: number, delta: number): void {
+    if (this.current >= this.max) {
+      this.regenAccum = 0;
       return;
     }
 
-    // 每 regenInterval ms 回復 1 能量
-    if (currentTime - this.lastRegenTime >= this.regenInterval) {
-      const ticks = Math.floor((currentTime - this.lastRegenTime) / this.regenInterval);
-      this.current = Math.min(this.max, this.current + ticks);
-      this.lastRegenTime += ticks * this.regenInterval;
+    // 依 delta（ms）累積能量
+    this.regenAccum += this.regenPerSec * (delta / 1000);
+
+    if (this.regenAccum >= 1) {
+      const add = Math.floor(this.regenAccum);
+      this.current = Math.min(this.max, this.current + add);
+      this.regenAccum -= add;
     }
   }
 
@@ -82,11 +86,20 @@ export class EnergyManager {
   /** 取得能量百分比 (0~1) */
   get ratio(): number { return this.current / this.max; }
 
+  /** 取得下一點能量的累積進度 (0~1)，供進度條使用 */
+  get regenProgress(): number {
+    if (this.current >= this.max) return 1;
+    return this.regenAccum; // 已是 0~1 之間
+  }
+
+  /** 每秒回復速率（供 UI 顯示） */
+  get regenRate(): number { return this.regenPerSec; }
+
   /** 更新設定（主基地升級後呼叫） */
-  updateConfig(maxEnergy: number, regenIntervalSec: number): void {
+  updateConfig(maxEnergy: number, regenPerSec: number): void {
     const oldRatio = this.ratio;
     this.max = maxEnergy;
-    this.regenInterval = regenIntervalSec * 1000;
+    this.regenPerSec = regenPerSec;
     // 維持同比例的當前能量
     this.current = Math.round(this.max * oldRatio);
   }

@@ -24,32 +24,35 @@ export const BASE_HP_UPGRADES: Array<{
   { level: 10, hp: 8000, maxUnitEra: 'space', cost: 5000 },
 ];
 
-/** 能量上限升級表（共 8 級） */
+/** 能量上限升級表（共 8 級，每升一級 +5 能量） */
 export const BASE_ENERGY_CAP_UPGRADES: Array<{
   level: number; maxEnergy: number; cost: number;
 }> = [
   { level: 1, maxEnergy: 10, cost: 0    },
-  { level: 2, maxEnergy: 12, cost: 80   },
-  { level: 3, maxEnergy: 15, cost: 160  },
-  { level: 4, maxEnergy: 18, cost: 280  },
-  { level: 5, maxEnergy: 22, cost: 450  },
-  { level: 6, maxEnergy: 25, cost: 700  },
-  { level: 7, maxEnergy: 28, cost: 1000 },
-  { level: 8, maxEnergy: 30, cost: 1350 },
+  { level: 2, maxEnergy: 15, cost: 80   },
+  { level: 3, maxEnergy: 20, cost: 160  },
+  { level: 4, maxEnergy: 25, cost: 280  },
+  { level: 5, maxEnergy: 30, cost: 450  },
+  { level: 6, maxEnergy: 35, cost: 700  },
+  { level: 7, maxEnergy: 40, cost: 1000 },
+  { level: 8, maxEnergy: 45, cost: 1350 },
 ];
 
-/** 能量回復速度升級表（共 8 級，regenIntervalSec = 每 N 秒 +1 能量） */
+/** 能量回復速度升級表（共 11 級，regenPerSec = 每秒回復能量，基礎 1.0，每升一級 +0.2） */
 export const BASE_REGEN_UPGRADES: Array<{
-  level: number; regenIntervalSec: number; cost: number;
+  level: number; regenPerSec: number; cost: number;
 }> = [
-  { level: 1, regenIntervalSec: 10,  cost: 0    },
-  { level: 2, regenIntervalSec: 8,   cost: 100  },
-  { level: 3, regenIntervalSec: 7,   cost: 180  },
-  { level: 4, regenIntervalSec: 6,   cost: 300  },
-  { level: 5, regenIntervalSec: 5,   cost: 480  },
-  { level: 6, regenIntervalSec: 4,   cost: 750  },
-  { level: 7, regenIntervalSec: 3.5, cost: 1100 },
-  { level: 8, regenIntervalSec: 3,   cost: 1600 },
+  { level: 1,  regenPerSec: 1.0, cost: 0    },
+  { level: 2,  regenPerSec: 1.2, cost: 100  },
+  { level: 3,  regenPerSec: 1.4, cost: 180  },
+  { level: 4,  regenPerSec: 1.6, cost: 300  },
+  { level: 5,  regenPerSec: 1.8, cost: 480  },
+  { level: 6,  regenPerSec: 2.0, cost: 700  },
+  { level: 7,  regenPerSec: 2.2, cost: 1000 },
+  { level: 8,  regenPerSec: 2.4, cost: 1350 },
+  { level: 9,  regenPerSec: 2.6, cost: 1800 },
+  { level: 10, regenPerSec: 2.8, cost: 2400 },
+  { level: 11, regenPerSec: 3.0, cost: 3200 },
 ];
 
 export const ERA_INDEX: Record<string, number> = {

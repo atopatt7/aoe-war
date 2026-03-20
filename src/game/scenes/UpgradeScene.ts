@@ -2,7 +2,10 @@
 // UpgradeScene.ts — 升級畫面（使用 SaveManager）
 // ============================================================
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, UNIT_NAMES, ERA_NAMES } from '@/game/GameConfig';
+import {
+  GAME_WIDTH, GAME_HEIGHT, UNIT_NAMES, ERA_NAMES,
+  BASE_HP_UPGRADES, BASE_ENERGY_CAP_UPGRADES, BASE_REGEN_UPGRADES,
+} from '@/game/GameConfig';
 import { UNIT_ENERGY_COST } from '@/game/managers/EnergyManager';
 import { SaveManager } from '@/game/SaveManager';
 import type { PlayerSave, UnitData, BaseData, UnitType, Era, UpgradeData } from '@/types/game';
@@ -174,46 +177,186 @@ export class UpgradeScene extends Phaser.Scene {
     }
   }
 
+  // ─────────────────────────────────────────────────────────
+  // 主基地升級：三張獨立升級卡（血量 / 能量上限 / 能量回速）
+  // ─────────────────────────────────────────────────────────
   private renderBaseUpgrade(): void {
     const W = GAME_WIDTH, TOP = 88;
-    const currentLv  = this.playerSave.baseLevel ?? 1;
-    const currentCfg = this.baseData?.levels?.find(l => l.level === currentLv);
-    const nextCfg    = this.baseData?.levels?.find(l => l.level === currentLv + 1);
-    if (!currentCfg) return;
 
-    this.contentContainer.add(this.add.text(W / 2, TOP + 16, `🏰 主基地  Lv.${currentLv}`, { fontSize: '22px', color: '#FFD700', fontStyle: 'bold' }).setOrigin(0.5).setDepth(21));
-    this.contentContainer.add(this.add.text(W / 2, TOP + 44, `最高可用時代：${ERA_NAMES[currentCfg.maxUnitEra as Era]}`, { fontSize: '15px', color: '#aaffaa' }).setOrigin(0.5).setDepth(21));
+    this.contentContainer.add(
+      this.add.text(W / 2, TOP + 10, '🏰 主基地升級', {
+        fontSize: '22px', color: '#FFD700', fontStyle: 'bold',
+      }).setOrigin(0.5).setDepth(21)
+    );
+    this.contentContainer.add(
+      this.add.text(W / 2, TOP + 38, '每條屬性可獨立升級，互不影響', {
+        fontSize: '13px', color: '#888888',
+      }).setOrigin(0.5).setDepth(21)
+    );
 
-    [
-      ['基地血量', String(currentCfg.hp), nextCfg ? String(nextCfg.hp) : '—'],
-      ['能量上限', String(currentCfg.maxEnergy), nextCfg ? String(nextCfg.maxEnergy) : '—'],
-      ['能量回復', `${currentCfg.energyRegenInterval}秒/點`, nextCfg ? `${nextCfg.energyRegenInterval}秒/點` : '—'],
-      ['可用時代', ERA_NAMES[currentCfg.maxUnitEra as Era], nextCfg ? ERA_NAMES[nextCfg.maxUnitEra as Era] : '—'],
-    ].forEach(([lbl, cur, nxt], i) => {
-      const y = TOP + 80 + i * 30;
-      this.contentContainer.add(this.add.text(80,          y, lbl, { fontSize: '13px', color: '#888888' }).setDepth(21));
-      this.contentContainer.add(this.add.text(260,         y, cur, { fontSize: '13px', color: '#ffffff' }).setDepth(21));
-      this.contentContainer.add(this.add.text(W / 2 + 20, y, `→ ${nxt}`, { fontSize: '13px', color: nxt !== '—' ? '#aaffaa' : '#555555' }).setDepth(21));
+    // 三張卡片水平排列
+    const cardW   = Math.floor((W - 80) / 3);
+    const cardH   = 330;
+    const cardY   = TOP + 60 + cardH / 2;
+    const cards: Array<{
+      icon: string; title: string; subtitle: string;
+      currentVal: string; nextVal: string;
+      lv: number; maxLv: number; cost: number;
+      stat: 'hp' | 'energyCap' | 'regen';
+      color: number; strokeColor: number;
+    }> = [];
+
+    const hpLv  = this.playerSave.baseHpLevel        ?? 1;
+    const capLv = this.playerSave.baseEnergyCapLevel  ?? 1;
+    const regLv = this.playerSave.baseRegenLevel      ?? 1;
+
+    const curHp  = BASE_HP_UPGRADES.find(l => l.level === hpLv)!;
+    const nextHp = BASE_HP_UPGRADES.find(l => l.level === hpLv + 1);
+    cards.push({
+      icon: '❤', title: '基地血量', subtitle: '同時解鎖可用時代',
+      currentVal: `${curHp.hp} HP\n${ERA_NAMES[curHp.maxUnitEra]}`,
+      nextVal: nextHp ? `${nextHp.hp} HP\n${ERA_NAMES[nextHp.maxUnitEra]}` : '—',
+      lv: hpLv, maxLv: 10, cost: nextHp?.cost ?? 0,
+      stat: 'hp', color: 0x3a1515, strokeColor: 0xff6666,
     });
 
-    const isMax      = !nextCfg;
-    const canUpgrade = !isMax && !!nextCfg && this.playerSave.gold >= nextCfg.upgradeCost;
-    const btnY       = GAME_HEIGHT - 50;
-    const btnBg      = this.add.rectangle(W / 2, btnY, W - 60, 52, canUpgrade ? 0x226633 : 0x333333).setStrokeStyle(2, 0x88ff88).setDepth(21).setInteractive({ useHandCursor: !!canUpgrade });
-    this.contentContainer.add(btnBg);
-    this.contentContainer.add(this.add.text(W / 2, btnY - 8, isMax ? '已達最高等級' : `⬆ 升級主基地 → Lv.${currentLv + 1}`, { fontSize: '16px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5).setDepth(22));
-    if (!isMax && nextCfg) this.contentContainer.add(this.add.text(W / 2, btnY + 12, `💰 ${nextCfg.upgradeCost} 金幣`, { fontSize: '13px', color: canUpgrade ? '#FFD700' : '#888888' }).setOrigin(0.5).setDepth(22));
+    const curCap  = BASE_ENERGY_CAP_UPGRADES.find(l => l.level === capLv)!;
+    const nextCap = BASE_ENERGY_CAP_UPGRADES.find(l => l.level === capLv + 1);
+    cards.push({
+      icon: '⚡', title: '能量上限', subtitle: '提高可同時蓄積的能量',
+      currentVal: `${curCap.maxEnergy} 能量`,
+      nextVal: nextCap ? `${nextCap.maxEnergy} 能量` : '—',
+      lv: capLv, maxLv: 8, cost: nextCap?.cost ?? 0,
+      stat: 'energyCap', color: 0x1a2a3a, strokeColor: 0x44aaff,
+    });
 
-    if (canUpgrade && nextCfg) {
-      btnBg.on('pointerdown', () => {
-        // ✅ 用 SaveManager 升級並儲存
-        const updated = SaveManager.saveBaseUpgrade(this.playerSave, nextCfg.upgradeCost);
-        if (updated) {
-          this.playerSave = updated;
-          this.goldText.setText(`💰 ${this.playerSave.gold}`);
-          this.renderContent();
+    const curReg  = BASE_REGEN_UPGRADES.find(l => l.level === regLv)!;
+    const nextReg = BASE_REGEN_UPGRADES.find(l => l.level === regLv + 1);
+    cards.push({
+      icon: '🔄', title: '能量回速', subtitle: '縮短每點能量回復時間',
+      currentVal: `${curReg.regenIntervalSec}秒/點`,
+      nextVal: nextReg ? `${nextReg.regenIntervalSec}秒/點` : '—',
+      lv: regLv, maxLv: 8, cost: nextReg?.cost ?? 0,
+      stat: 'regen', color: 0x152a15, strokeColor: 0x44ff88,
+    });
+
+    cards.forEach((card, ci) => {
+      const cx = 40 + cardW / 2 + ci * (cardW + 20);
+      const isMax     = card.lv >= card.maxLv;
+      const canAfford = !isMax && this.playerSave.gold >= card.cost;
+
+      // 卡片背景
+      const cardBg = this.add.rectangle(cx, cardY, cardW, cardH, card.color)
+        .setStrokeStyle(2, isMax ? 0x888888 : card.strokeColor).setDepth(21);
+      this.contentContainer.add(cardBg);
+
+      // 標題列
+      this.contentContainer.add(
+        this.add.text(cx, cardY - cardH / 2 + 22, `${card.icon} ${card.title}`, {
+          fontSize: '16px', color: '#ffffff', fontStyle: 'bold',
+        }).setOrigin(0.5).setDepth(22)
+      );
+      this.contentContainer.add(
+        this.add.text(cx, cardY - cardH / 2 + 44, card.subtitle, {
+          fontSize: '11px', color: '#888888',
+        }).setOrigin(0.5).setDepth(22)
+      );
+
+      // 等級條
+      const lvBarY = cardY - cardH / 2 + 70;
+      this.contentContainer.add(
+        this.add.text(cx, lvBarY, `Lv.${card.lv} / ${card.maxLv}`, {
+          fontSize: '13px', color: isMax ? '#FFD700' : '#aaaacc',
+        }).setOrigin(0.5).setDepth(22)
+      );
+      for (let i = 0; i < card.maxLv; i++) {
+        const filled = i < card.lv;
+        const bw     = Math.floor((cardW - 24) / card.maxLv) - 2;
+        const bx     = cx - (cardW - 24) / 2 + i * ((cardW - 24) / card.maxLv) + bw / 2;
+        this.contentContainer.add(
+          this.add.rectangle(bx, lvBarY + 18, bw, 8, filled ? card.strokeColor : 0x222233)
+            .setStrokeStyle(1, 0x444455).setDepth(22)
+        );
+      }
+
+      // 分隔線
+      this.contentContainer.add(
+        this.add.rectangle(cx, cardY - cardH / 2 + 108, cardW - 20, 1, 0x333355).setDepth(22)
+      );
+
+      // 目前數值
+      this.contentContainer.add(
+        this.add.text(cx, cardY - cardH / 2 + 124, '目前', {
+          fontSize: '11px', color: '#666688',
+        }).setOrigin(0.5).setDepth(22)
+      );
+      this.contentContainer.add(
+        this.add.text(cx, cardY - cardH / 2 + 150, card.currentVal, {
+          fontSize: '15px', color: '#ffffff', align: 'center',
+        }).setOrigin(0.5).setDepth(22)
+      );
+
+      // 箭頭 + 升級後數值
+      if (!isMax) {
+        this.contentContainer.add(
+          this.add.text(cx, cardY - cardH / 2 + 196, '↓ 升級後', {
+            fontSize: '11px', color: '#666688',
+          }).setOrigin(0.5).setDepth(22)
+        );
+        this.contentContainer.add(
+          this.add.text(cx, cardY - cardH / 2 + 222, card.nextVal, {
+            fontSize: '15px', color: '#aaffaa', align: 'center',
+          }).setOrigin(0.5).setDepth(22)
+        );
+      } else {
+        this.contentContainer.add(
+          this.add.text(cx, cardY - cardH / 2 + 210, '✅ 已達最高等級', {
+            fontSize: '13px', color: '#FFD700', align: 'center',
+          }).setOrigin(0.5).setDepth(22)
+        );
+      }
+
+      // 升級按鈕
+      const btnY   = cardY + cardH / 2 - 30;
+      const btnBg  = this.add.rectangle(cx, btnY, cardW - 20, 42,
+        canAfford ? (0x111111 | (card.strokeColor & 0x444444)) : 0x222222)
+        .setStrokeStyle(1.5, canAfford ? card.strokeColor : 0x444444)
+        .setDepth(22)
+        .setInteractive({ useHandCursor: canAfford });
+      this.contentContainer.add(btnBg);
+
+      if (isMax) {
+        this.contentContainer.add(
+          this.add.text(cx, btnY, '滿等', { fontSize: '13px', color: '#888888' })
+            .setOrigin(0.5).setDepth(23)
+        );
+      } else {
+        this.contentContainer.add(
+          this.add.text(cx, btnY - 8, '⬆ 升級', {
+            fontSize: '14px', color: canAfford ? '#ffffff' : '#555555', fontStyle: 'bold',
+          }).setOrigin(0.5).setDepth(23)
+        );
+        this.contentContainer.add(
+          this.add.text(cx, btnY + 10, `💰 ${card.cost}`, {
+            fontSize: '12px', color: canAfford ? '#FFD700' : '#555555',
+          }).setOrigin(0.5).setDepth(23)
+        );
+
+        if (canAfford) {
+          const stat = card.stat;
+          const cost = card.cost;
+          btnBg.on('pointerdown', () => {
+            const updated = SaveManager.saveBaseStatUpgrade(this.playerSave, stat, cost);
+            if (updated) {
+              this.playerSave = updated;
+              this.goldText.setText(`💰 ${this.playerSave.gold}`);
+              this.renderContent();
+            }
+          });
+          btnBg.on('pointerover',  () => btnBg.setFillStyle(card.strokeColor & 0x333333 | 0x111111));
+          btnBg.on('pointerout',   () => btnBg.setFillStyle(0x111111 | (card.strokeColor & 0x444444)));
         }
-      });
-    }
+      }
+    });
   }
 }

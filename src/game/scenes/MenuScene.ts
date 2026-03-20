@@ -104,8 +104,11 @@ export class MenuScene extends Phaser.Scene {
       fontSize: '16px', color: '#FFD700',
     });
 
-    this.add.text(220, 60, `🏰 基地 Lv.${this.playerSave.baseLevel}`, {
-      fontSize: '16px', color: '#88ccff',
+    const hpLv  = this.playerSave.baseHpLevel        ?? 1;
+    const capLv = this.playerSave.baseEnergyCapLevel  ?? 1;
+    const regLv = this.playerSave.baseRegenLevel      ?? 1;
+    this.add.text(220, 60, `🏰 基地 ❤${hpLv} ⚡${capLv} 🔄${regLv}`, {
+      fontSize: '14px', color: '#88ccff',
     });
 
     // 升級按鈕（視覺用，點擊由 handlePointerDown 處理）

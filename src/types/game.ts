@@ -100,7 +100,12 @@ export interface PlayerSave {
   unitUpgrades: {
     [key in UnitType]: number;  // 各兵種目前升級次數
   };
-  baseLevel: number;
+  /** 主基地血量升級等級 (1-10)，同時決定可用時代 */
+  baseHpLevel: number;
+  /** 能量上限升級等級 (1-8) */
+  baseEnergyCapLevel: number;
+  /** 能量回復速度升級等級 (1-8) */
+  baseRegenLevel: number;
   levelGrades: {
     [levelId: number]: Grade;
   };

@@ -6,6 +6,7 @@ import Phaser from 'phaser';
 import {
   GAME_WIDTH, GAME_HEIGHT, GROUND_Y,
   PLAYER_BASE_X, ENEMY_BASE_X, ERA_NAMES,
+  BASE_HP_UPGRADES, BASE_ENERGY_CAP_UPGRADES, BASE_REGEN_UPGRADES,
 } from '@/game/GameConfig';
 import { UnitManager }   from '@/game/managers/UnitManager';
 import { CombatManager } from '@/game/managers/CombatManager';
@@ -232,10 +233,17 @@ export class GameScene extends Phaser.Scene {
   }
 
   private getBaseConfig() {
-    const lv = this.playerSave?.baseLevel ?? 1;
-    return this.baseData?.levels?.find(l => l.level === lv) ?? {
-      level: 1, hp: 1000, maxEnergy: 10,
-      energyRegenInterval: 10, maxUnitEra: 'stone', upgradeCost: 0,
+    const hpLv  = this.playerSave?.baseHpLevel        ?? 1;
+    const capLv = this.playerSave?.baseEnergyCapLevel  ?? 1;
+    const regLv = this.playerSave?.baseRegenLevel      ?? 1;
+    const hpCfg  = BASE_HP_UPGRADES.find(l => l.level === hpLv)  ?? BASE_HP_UPGRADES[0];
+    const capCfg = BASE_ENERGY_CAP_UPGRADES.find(l => l.level === capLv) ?? BASE_ENERGY_CAP_UPGRADES[0];
+    const regCfg = BASE_REGEN_UPGRADES.find(l => l.level === regLv) ?? BASE_REGEN_UPGRADES[0];
+    return {
+      hp: hpCfg.hp,
+      maxEnergy: capCfg.maxEnergy,
+      energyRegenInterval: regCfg.regenIntervalSec,
+      maxUnitEra: hpCfg.maxUnitEra,
     };
   }
 

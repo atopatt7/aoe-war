@@ -4,7 +4,7 @@
 // ============================================================
 import type { PlayerSave, Grade } from '@/types/game';
 
-const SAVE_KEY = 'aoewar_save_v1'; // 版本化 key，避免舊格式衝突
+const SAVE_KEY = 'aoewar_save_v2'; // v2：三條獨立升級軌
 
 /** 預設初始存檔 */
 const DEFAULT_SAVE: PlayerSave = {
@@ -16,7 +16,9 @@ const DEFAULT_SAVE: PlayerSave = {
     tank: 0,
     mage: 0,
   },
-  baseLevel: 1,
+  baseHpLevel: 1,
+  baseEnergyCapLevel: 1,
+  baseRegenLevel: 1,
   levelGrades: {},
 };
 
@@ -32,9 +34,15 @@ export class SaveManager {
       const parsed = JSON.parse(raw) as Partial<PlayerSave>;
 
       // 深度合併：確保新增欄位有預設值（向後相容）
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const anyParsed = parsed as any;
       return {
         ...DEFAULT_SAVE,
         ...parsed,
+        // v1→v2 遷移：舊存檔有 baseLevel，映射到 baseHpLevel
+        baseHpLevel:        parsed.baseHpLevel        ?? anyParsed.baseLevel ?? 1,
+        baseEnergyCapLevel: parsed.baseEnergyCapLevel ?? 1,
+        baseRegenLevel:     parsed.baseRegenLevel     ?? 1,
         unitUpgrades: {
           ...DEFAULT_SAVE.unitUpgrades,
           ...(parsed.unitUpgrades ?? {}),
@@ -123,16 +131,30 @@ export class SaveManager {
   }
 
   // ─────────────────────────────────────────────
-  // 升級主基地後儲存
+  // 升級主基地某條屬性後儲存
+  // stat: 'hp' | 'energyCap' | 'regen'
   // ─────────────────────────────────────────────
-  static saveBaseUpgrade(save: PlayerSave, cost: number): PlayerSave | null {
+  static saveBaseStatUpgrade(
+    save: PlayerSave,
+    stat: 'hp' | 'energyCap' | 'regen',
+    cost: number,
+  ): PlayerSave | null {
     if (save.gold < cost) return null;
-    if (save.baseLevel >= 10) return null; // 已最高級
 
-    const updated = {
+    const KEY_MAP = {
+      hp:        'baseHpLevel'        as const,
+      energyCap: 'baseEnergyCapLevel' as const,
+      regen:     'baseRegenLevel'     as const,
+    };
+    const MAX_MAP = { hp: 10, energyCap: 8, regen: 8 };
+    const key = KEY_MAP[stat];
+
+    if ((save[key] as number) >= MAX_MAP[stat]) return null; // 已最高級
+
+    const updated: PlayerSave = {
       ...save,
       gold: save.gold - cost,
-      baseLevel: save.baseLevel + 1,
+      [key]: (save[key] as number) + 1,
     };
     SaveManager.save(updated);
     return updated;

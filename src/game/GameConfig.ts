@@ -38,21 +38,25 @@ export const BASE_ENERGY_CAP_UPGRADES: Array<{
   { level: 8, maxEnergy: 45, cost: 1350 },
 ];
 
-/** 能量回復速度升級表（共 11 級，regenPerSec = 每秒回復能量，基礎 1.0，每升一級 +0.2） */
+/** 能量回復速度升級表（共 15 級，regenPerSec = 每秒回復能量，基礎 0.2，每升一級 +0.2，上限 3.0） */
 export const BASE_REGEN_UPGRADES: Array<{
   level: number; regenPerSec: number; cost: number;
 }> = [
-  { level: 1,  regenPerSec: 1.0, cost: 0    },
-  { level: 2,  regenPerSec: 1.2, cost: 100  },
-  { level: 3,  regenPerSec: 1.4, cost: 180  },
-  { level: 4,  regenPerSec: 1.6, cost: 300  },
-  { level: 5,  regenPerSec: 1.8, cost: 480  },
-  { level: 6,  regenPerSec: 2.0, cost: 700  },
-  { level: 7,  regenPerSec: 2.2, cost: 1000 },
-  { level: 8,  regenPerSec: 2.4, cost: 1350 },
-  { level: 9,  regenPerSec: 2.6, cost: 1800 },
-  { level: 10, regenPerSec: 2.8, cost: 2400 },
-  { level: 11, regenPerSec: 3.0, cost: 3200 },
+  { level: 1,  regenPerSec: 0.2, cost: 0    },
+  { level: 2,  regenPerSec: 0.4, cost: 80   },
+  { level: 3,  regenPerSec: 0.6, cost: 160  },
+  { level: 4,  regenPerSec: 0.8, cost: 280  },
+  { level: 5,  regenPerSec: 1.0, cost: 420  },
+  { level: 6,  regenPerSec: 1.2, cost: 600  },
+  { level: 7,  regenPerSec: 1.4, cost: 820  },
+  { level: 8,  regenPerSec: 1.6, cost: 1100 },
+  { level: 9,  regenPerSec: 1.8, cost: 1450 },
+  { level: 10, regenPerSec: 2.0, cost: 1900 },
+  { level: 11, regenPerSec: 2.2, cost: 2450 },
+  { level: 12, regenPerSec: 2.4, cost: 3100 },
+  { level: 13, regenPerSec: 2.6, cost: 3900 },
+  { level: 14, regenPerSec: 2.8, cost: 4900 },
+  { level: 15, regenPerSec: 3.0, cost: 6200 },
 ];
 
 export const ERA_INDEX: Record<string, number> = {

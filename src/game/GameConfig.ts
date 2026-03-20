@@ -3,7 +3,7 @@
 // ============================================================
 
 export const GAME_WIDTH  = 1280;
-export const GAME_HEIGHT = 400;
+export const GAME_HEIGHT = 720;
 
 export const ERA_INDEX: Record<string, number> = {
   stone: 0, feudal: 1, castle: 2, modern: 3, space: 4,
@@ -16,7 +16,7 @@ export const UNIT_NAMES: Record<string, string> = {
   swordsman: '劍士', archer: '弓箭手', tank: '肉盾', mage: '法師',
 };
 
-export const GROUND_Y      = 310;
+export const GROUND_Y      = 560;
 export const PLAYER_BASE_X = 80;
 export const ENEMY_BASE_X  = GAME_WIDTH - 80;
 export const PLAYER_SPAWN_X = PLAYER_BASE_X + 60;

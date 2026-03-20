@@ -31,7 +31,8 @@ export class MenuScene extends Phaser.Scene {
     this.btnBgs.clear();
     this.btnDefaultColors.clear();
 
-    this.levelsData = this.cache.json.get('levels') ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.levelsData = (this as any).cache.json.get('levels') ?? [];
     this.playerSave = SaveManager.load();
 
     this.drawHeader();

@@ -18,8 +18,10 @@ export default function GameCanvas() {
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 200));
-    if (typeof screen !== 'undefined' && screen.orientation?.lock) {
-      screen.orientation.lock('landscape').catch(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const orientation = (screen as any).orientation;
+    if (typeof screen !== 'undefined' && orientation?.lock) {
+      orientation.lock('landscape').catch(() => {});
     }
     return () => window.removeEventListener('resize', checkOrientation);
   }, []);
@@ -40,7 +42,8 @@ export default function GameCanvas() {
       const game = new Phaser.Game({ ...config, parent: 'phaser-container' });
       gameRef.current = game;
 
-      const onResize = () => { game?.scale?.refresh?.(); };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const onResize = () => { (game as any)?.scale?.refresh?.(); };
       window.addEventListener('resize', onResize);
     };
 

@@ -75,10 +75,12 @@ export class GameScene extends Phaser.Scene {
   // ✅ create() 改為同步 — 從 cache 讀取已載入的資料
   create(): void {
     // 從 Phaser cache 讀取（preload 已保證載入完成）
-    const levels: LevelData[] = this.cache.json.get('levels') ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const phaserCache = (this as any).cache;
+    const levels: LevelData[] = phaserCache.json.get('levels') ?? [];
     this.levelData    = levels.find(l => l.id === this.levelId) ?? levels[0];
-    this.baseData     = this.cache.json.get('base') ?? { levels: [] };
-    const uObj        = this.cache.json.get('units');
+    this.baseData     = phaserCache.json.get('base') ?? { levels: [] };
+    const uObj        = phaserCache.json.get('units');
     this.allUnitsData = Array.isArray(uObj) ? uObj : (uObj?.units ?? []);
 
     this.initState();

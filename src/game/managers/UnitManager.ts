@@ -78,10 +78,11 @@ export class UnitManager {
     // 依升級次數計算數值加成（每級 +3%）
     const bonusRate = 1 + upgradeLevel * 0.03;
 
-    // 決定生成位置（玩家從左邊，敵人從右邊）
+    // 決定生成位置（城堡「內側」出生，走出城堡後才遇敵）
+    // 城堡半寬約 45px；出生在城堡後方，避免出兵時直接被城門外的敵人打到
     const spawnX = faction === 'player'
-      ? PLAYER_BASE_X + 65
-      : ENEMY_BASE_X - 65;
+      ? PLAYER_BASE_X - 30   // x ≈ 50，藏在城牆後
+      : ENEMY_BASE_X + 30;   // x ≈ 1230，藏在敵城牆後
 
     // 建立 UnitInstance
     const instance: UnitInstance = {

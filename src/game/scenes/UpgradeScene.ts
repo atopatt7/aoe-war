@@ -94,13 +94,16 @@ export class UpgradeScene extends Phaser.Scene {
       bg.on('pointerdown', () => { this.selectedTab = i; this.drawTabs(); this.renderContent(); });
       bg.on('pointerover', () => bg.setFillStyle(tab.color + 0x111111));
       bg.on('pointerout',  () => bg.setFillStyle(tab.color));
-      this.tabContainers.push(this.add.container(0, 0, [bg, lbl, line]) as unknown as Phaser.GameObjects.Container);
+      const tabCont = this.add.container(0, 0, [bg, lbl, line]);
+      tabCont.setDepth(15); // 必須大於背景板 depth=9，否則 Container 整體被蓋住
+      this.tabContainers.push(tabCont as unknown as Phaser.GameObjects.Container);
     });
   }
 
   private renderContent(): void {
     this.contentContainer?.destroy();
     this.contentContainer = this.add.container(0, 0);
+    this.contentContainer.setDepth(15); // 必須大於背景板 depth=9
     if (this.selectedTab < 4) this.renderUnitUpgrade(UNIT_TYPES[this.selectedTab]);
     else this.renderBaseUpgrade();
   }

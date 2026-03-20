@@ -1,5 +1,5 @@
 // ============================================================
-// MenuScene.ts — 主選單（使用 SaveManager 讀取存檔）
+// MenuScene.ts — 主選單（修正 Container 點擊偵測）
 // ============================================================
 import Phaser from 'phaser';
 import type { PlayerSave, LevelData } from '@/types/game';
@@ -76,7 +76,10 @@ export class MenuScene extends Phaser.Scene {
     }
   }
 
-  private createLevelButton(x: number, y: number, levelId: number, isUnlocked: boolean, grade?: string): void {
+  private createLevelButton(
+    x: number, y: number, levelId: number,
+    isUnlocked: boolean, grade?: string
+  ): void {
     const bgColor     = isUnlocked ? 0x1a3a5c : 0x222222;
     const borderColor = isUnlocked ? 0x4488cc : 0x444444;
     const textColor   = isUnlocked ? '#ffffff' : '#555555';
@@ -99,10 +102,21 @@ export class MenuScene extends Phaser.Scene {
     const container = this.add.container(x, y, [bg, numText, eraText, ...gradeObjs]);
 
     if (isUnlocked) {
-      bg.setInteractive({ useHandCursor: true })
-        .on('pointerover', () => { bg.setFillStyle(0x2255aa); this.tweens.add({ targets: container, scaleX: 1.06, scaleY: 1.06, duration: 80 }); })
-        .on('pointerout',  () => { bg.setFillStyle(bgColor);  this.tweens.add({ targets: container, scaleX: 1,    scaleY: 1,    duration: 80 }); })
-        .on('pointerdown', () => this.scene.start('GameScene', { levelId, playerSave: this.playerSave }));
+      // ✅ 關鍵修正：interactive 設在 Container 上（加上明確尺寸）
+      // 不設在子物件 bg 上，避免 Phaser 座標計算偏差導致點擊失效
+      container.setSize(BTN_W, BTN_H);
+      container.setInteractive({ useHandCursor: true })
+        .on('pointerover', () => {
+          bg.setFillStyle(0x2255aa);
+          this.tweens.add({ targets: container, scaleX: 1.06, scaleY: 1.06, duration: 80 });
+        })
+        .on('pointerout', () => {
+          bg.setFillStyle(bgColor);
+          this.tweens.add({ targets: container, scaleX: 1, scaleY: 1, duration: 80 });
+        })
+        .on('pointerdown', () => {
+          this.scene.start('GameScene', { levelId, playerSave: this.playerSave });
+        });
     }
   }
 

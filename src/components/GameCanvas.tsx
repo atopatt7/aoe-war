@@ -70,8 +70,12 @@ export default function GameCanvas() {
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
+          right: 0,
+          bottom: 0,
+          /* 使用安全區域內縮，避免 iPhone 底部 Home 指示列遮擋 */
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          width: '100%',
+          height: '100%',
           overflow: 'hidden',
           backgroundColor: '#0d0d1a',
         }}

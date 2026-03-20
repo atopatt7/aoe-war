@@ -11,7 +11,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>AOE WAR - 跨時代戰爭</title>
         <meta name="description" content="橫向塔防遊戲 - 跨時代戰爭" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </Head>
       <Component {...pageProps} />
     </>

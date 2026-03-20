@@ -1,7 +1,6 @@
 // ============================================================
 // GameCanvas.tsx — 全螢幕 Phaser 容器
-// ✅ 簡化版：移除 containerSize 複雜狀態，直接 init Phaser
-// ✅ 手機橫屏：偵測直屏顯示提示
+// ✅ display:'block' 明確覆蓋，確保無 flex 影響 Phaser 輸入座標
 // ============================================================
 'use client';
 import { useEffect, useRef, useState } from 'react';
@@ -19,9 +18,8 @@ export default function GameCanvas() {
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 200));
-
     if (typeof screen !== 'undefined' && screen.orientation?.lock) {
-      screen.orientation.lock('landscape').catch(() => {/* iOS 不支援，靜默忽略 */});
+      screen.orientation.lock('landscape').catch(() => {});
     }
     return () => window.removeEventListener('resize', checkOrientation);
   }, []);
@@ -29,8 +27,6 @@ export default function GameCanvas() {
   // ── Phaser 初始化 ──────────────────────────────────────────
   useEffect(() => {
     if (typeof window === 'undefined' || gameRef.current) return;
-
-    let game: any = null;
 
     const initGame = async () => {
       const Phaser           = (await import('phaser')).default;
@@ -41,14 +37,9 @@ export default function GameCanvas() {
       const { createGameConfig } = await import('@/game/GameConfig');
 
       const config = createGameConfig([BootScene, MenuScene, GameScene, UpgradeScene]);
-
-      game = new Phaser.Game({
-        ...config,
-        parent: 'phaser-container',
-      });
+      const game = new Phaser.Game({ ...config, parent: 'phaser-container' });
       gameRef.current = game;
 
-      // resize 時通知 Phaser 重新計算縮放
       const onResize = () => { game?.scale?.refresh?.(); };
       window.addEventListener('resize', onResize);
     };
@@ -59,16 +50,23 @@ export default function GameCanvas() {
       gameRef.current?.destroy(true);
       gameRef.current = null;
     };
-  }, []); // 只初始化一次
+  }, []);
 
   return (
     <>
-      {/* Phaser canvas 容器，不加 flex 避免座標偏移 */}
+      {/*
+        ⚠️ display:'block' 必須明確指定
+        不能用 flex/grid 等，否則 Phaser Scale Manager 的 margin-top
+        會被 flex alignment 重新計算，導致 canvas 位置偏移，
+        Phaser canvasBounds 快取的座標與視覺位置不符，input 系統失效
+      */}
       <div
         id="phaser-container"
         style={{
+          display: 'block',
           position: 'fixed',
-          top: 0, left: 0,
+          top: 0,
+          left: 0,
           width: '100vw',
           height: '100vh',
           overflow: 'hidden',
@@ -76,14 +74,19 @@ export default function GameCanvas() {
         }}
       />
 
-      {/* 直屏提示遮罩 */}
+      {/* 直屏提示遮罩（與 phaser-container 同層，不影響 canvas 定位） */}
       {isPortrait && (
         <div style={{
-          position: 'fixed', inset: 0,
+          position: 'fixed',
+          inset: 0,
           backgroundColor: '#0d0d1a',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          zIndex: 9999, color: '#FFD700', gap: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          color: '#FFD700',
+          gap: '20px',
         }}>
           <div style={{ fontSize: '64px' }}>📱</div>
           <div style={{ fontSize: '22px', fontWeight: 'bold' }}>請旋轉裝置</div>

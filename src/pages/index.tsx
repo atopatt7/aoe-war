@@ -1,5 +1,5 @@
 // ============================================================
-// index.tsx — 首頁，純渲染 GameCanvas（無多餘包裝）
+// index.tsx — 首頁（v4 強制重新打包）
 // ============================================================
 import dynamic from 'next/dynamic';
 
@@ -21,7 +21,6 @@ const GameCanvas = dynamic(() => import('@/components/GameCanvas'), {
 
 export default function Home() {
   return (
-    // margin:0 確保沒有多餘空白
     <main style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
       <GameCanvas />
     </main>

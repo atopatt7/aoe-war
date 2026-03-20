@@ -62,11 +62,17 @@ export class UpgradeScene extends Phaser.Scene {
     const W = GAME_WIDTH;
     this.add.rectangle(W / 2, 22, W, 44, 0x000000, 0.85).setDepth(10);
 
-    const backBtn = this.add.text(14, 6, '← 返回', { fontSize: '14px', color: '#aaaaff' })
+    // 返回按鈕：遠離螢幕邊角，避免 iOS 系統手勢區域干擾
+    // 用透明矩形擴大點擊範圍（80×44px 可觸控區）
+    const backHitZone = this.add.rectangle(55, 22, 80, 44, 0x000000, 0)
       .setDepth(11).setInteractive({ useHandCursor: true });
-    backBtn.on('pointerdown', () => this.scene.start('MenuScene'));
-    backBtn.on('pointerover', () => backBtn.setColor('#ffffff'));
-    backBtn.on('pointerout',  () => backBtn.setColor('#aaaaff'));
+    const backBtn = this.add.text(55, 22, '← 返回', {
+      fontSize: '16px', color: '#aaaaff',
+    }).setOrigin(0.5).setDepth(12);
+    const doBack = () => this.scene.start('MenuScene');
+    backHitZone.on('pointerdown', doBack);
+    backHitZone.on('pointerover',  () => backBtn.setColor('#ffffff'));
+    backHitZone.on('pointerout',   () => backBtn.setColor('#aaaaff'));
 
     this.add.text(W / 2, 8, '⬆  升級中心', { fontSize: '18px', color: '#FFD700', fontStyle: 'bold' }).setOrigin(0.5, 0).setDepth(11);
     this.goldText = this.add.text(W - 14, 8, `💰 ${this.playerSave.gold}`, { fontSize: '14px', color: '#FFD700' }).setOrigin(1, 0).setDepth(11);

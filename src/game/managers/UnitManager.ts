@@ -111,7 +111,8 @@ export class UnitManager {
       const fbKey    = `__fallback_${instance.unitType}_${isPlayer ? 'p' : 'e'}`;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(this.scene as any).textures.exists(fbKey)) {
-        const fg = this.scene.make.graphics({ x: 0, y: 0, add: false });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const fg = this.scene.make.graphics({ x: 0, y: 0 } as any);
         fg.fillStyle(color, 1);
         fg.fillRoundedRect(0, 0, visual.width, visual.height * 1.5, 4);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

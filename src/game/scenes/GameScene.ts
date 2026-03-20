@@ -1,5 +1,6 @@
 // ============================================================
 // GameScene.ts — 完整整合版（含 SaveManager 永久存檔）
+// ✅ 關鍵修正：改用 preload() + 同步 create()，移除 async create
 // ============================================================
 import Phaser from 'phaser';
 import {
@@ -37,7 +38,7 @@ export class GameScene extends Phaser.Scene {
   private playerBaseMaxHp: number = 1000;
   private enemyBaseHp: number = 1000;
   private enemyBaseMaxHp: number = 1000;
-  private gold: number = 0;        // 本局獲得的金幣（未結算）
+  private gold: number = 0;
   private elapsedMs: number = 0;
   private isGameOver: boolean = false;
 
@@ -55,7 +56,6 @@ export class GameScene extends Phaser.Scene {
 
   init(data: { levelId: number; playerSave: PlayerSave }): void {
     this.levelId    = data.levelId ?? 1;
-    // 每次進場重新從 localStorage 讀取最新存檔，確保金幣正確
     this.playerSave = SaveManager.load();
     this.isGameOver = false;
     this.elapsedMs  = 0;
@@ -65,15 +65,29 @@ export class GameScene extends Phaser.Scene {
     ]);
   }
 
-  async create(): Promise<void> {
-    await this.loadAllData();
+  // ✅ 在 preload 用 Phaser loader 載入所有資料
+  preload(): void {
+    this.load.json('levels', '/api/game-data?type=levels');
+    this.load.json('base',   '/api/game-data?type=base');
+    this.load.json('units',  '/api/game-data?type=units');
+  }
+
+  // ✅ create() 改為同步 — 從 cache 讀取已載入的資料
+  create(): void {
+    // 從 Phaser cache 讀取（preload 已保證載入完成）
+    const levels: LevelData[] = this.cache.json.get('levels') ?? [];
+    this.levelData    = levels.find(l => l.id === this.levelId) ?? levels[0];
+    this.baseData     = this.cache.json.get('base') ?? { levels: [] };
+    const uObj        = this.cache.json.get('units');
+    this.allUnitsData = Array.isArray(uObj) ? uObj : (uObj?.units ?? []);
+
     this.initState();
     this.drawBackground();
     this.drawGround();
     this.drawBases();
 
     this.unitManager   = new UnitManager(this, this.allUnitsData);
-    this.combatManager = new CombatManager(this.unitManager, this.levelData.goldPerKill);
+    this.combatManager = new CombatManager(this.unitManager, this.levelData?.goldPerKill ?? 10);
     this.energyManager = new EnergyManager(
       this.getBaseConfig().maxEnergy,
       this.getBaseConfig().energyRegenInterval
@@ -83,7 +97,7 @@ export class GameScene extends Phaser.Scene {
 
     this.uiManager.create(
       this.levelId,
-      this.levelData.enemyEra,
+      this.levelData?.enemyEra ?? 'stone',
       (unitType) => this.trySpawnPlayerUnit(unitType)
     );
 
@@ -125,7 +139,7 @@ export class GameScene extends Phaser.Scene {
       this.playerBaseMaxHp,
       this.enemyBaseHp,
       this.enemyBaseMaxHp,
-      this.playerSave.gold + this.gold,  // 顯示「存檔金幣 + 本局已賺」
+      this.playerSave.gold + this.gold,
       this.elapsedMs,
       this.spawnManager.getProgress(),
       this.currentEra,
@@ -191,7 +205,6 @@ export class GameScene extends Phaser.Scene {
       ? Math.floor(this.gold * multiplier)
       : Math.floor(this.gold * 0.5);
 
-    // ✅ 用 SaveManager 儲存，關視窗後仍保留
     if (isVictory) {
       this.playerSave = SaveManager.saveVictory(this.playerSave, this.levelId, finalGold, grade);
     } else {
@@ -205,22 +218,6 @@ export class GameScene extends Phaser.Scene {
         () => this.returnToMenu()
       );
     });
-  }
-
-  // ─── 資料載入 ───────────────────────────────
-  private async loadAllData(): Promise<void> {
-    try {
-      const [lRes, bRes, uRes] = await Promise.all([
-        fetch('/api/game-data?type=levels'),
-        fetch('/api/game-data?type=base'),
-        fetch('/api/game-data?type=units'),
-      ]);
-      const levels: LevelData[] = await lRes.json();
-      this.levelData    = levels.find(l => l.id === this.levelId) ?? levels[0];
-      this.baseData     = await bRes.json();
-      const uObj        = await uRes.json();
-      this.allUnitsData = Array.isArray(uObj) ? uObj : (uObj.units ?? []);
-    } catch (e) { console.error('載入失敗', e); }
   }
 
   private initState(): void {
@@ -282,7 +279,6 @@ export class GameScene extends Phaser.Scene {
     const baseY = GROUND_Y + 8;
     const px = PLAYER_BASE_X, ex = ENEMY_BASE_X;
 
-    // 玩家基地
     g.fillStyle(0x2244aa,1); g.fillRect(px-45,baseY-110,90,118);
     g.fillStyle(0x1a3388,1);
     for(let r=0;r<6;r++) for(let c=0;c<3;c++) g.fillRect(px-42+c*30+(r%2===0?0:15),baseY-106+r*18,26,14);
@@ -293,7 +289,6 @@ export class GameScene extends Phaser.Scene {
     g.fillTriangle(px+5,baseY-145,px+5,baseY-128,px+22,baseY-137);
     this.add.text(px,baseY-158,'我方基地',{fontSize:'10px',color:'#88aaff'}).setOrigin(0.5);
 
-    // 敵方基地
     g.fillStyle(0xaa2222,1); g.fillRect(ex-45,baseY-110,90,118);
     g.fillStyle(0x881818,1);
     for(let r=0;r<6;r++) for(let c=0;c<3;c++) g.fillRect(ex-42+c*30+(r%2===0?0:15),baseY-106+r*18,26,14);

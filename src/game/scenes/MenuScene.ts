@@ -1,5 +1,7 @@
 // ============================================================
-// MenuScene.ts — 主選單（修正 Container 點擊偵測）
+// MenuScene.ts — 主選單
+// ✅ 關鍵修正：改用 preload() + 同步 create()
+//    Phaser 不會 await async create()，必須在 preload 載入資料
 // ============================================================
 import Phaser from 'phaser';
 import type { PlayerSave, LevelData } from '@/types/game';
@@ -16,15 +18,18 @@ export class MenuScene extends Phaser.Scene {
 
   constructor() { super({ key: 'MenuScene' }); }
 
-  async create(): Promise<void> {
+  // ✅ 用 Phaser 內建 loader 在 preload 階段載入 JSON
+  //    Phaser 會 await loader，完成後才進入 create()
+  preload(): void {
+    this.load.json('levels', '/api/game-data?type=levels');
+  }
+
+  // ✅ create() 改為同步 — 從 cache 讀取已載入的資料
+  create(): void {
     this.cameras.main.setBackgroundColor('#0d0d1a');
 
-    try {
-      const res = await fetch('/api/game-data?type=levels');
-      this.levelsData = await res.json();
-    } catch (e) { console.error('無法載入關卡資料', e); }
-
-    // ✅ 每次進入主選單都從 localStorage 讀取最新存檔
+    // 從 Phaser cache 讀取（preload 已保證載入完成）
+    this.levelsData = this.cache.json.get('levels') ?? [];
     this.playerSave = SaveManager.load();
 
     this.drawHeader();
@@ -39,7 +44,6 @@ export class MenuScene extends Phaser.Scene {
       fontSize: '28px', color: '#FFD700', fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    // 金幣（讀自存檔）
     this.add.text(20, 60, `💰 金幣：${this.playerSave.gold}`, {
       fontSize: '16px', color: '#FFD700',
     });
@@ -48,7 +52,6 @@ export class MenuScene extends Phaser.Scene {
       fontSize: '16px', color: '#88ccff',
     });
 
-    // 升級按鈕
     const upgradeBtn = this.add.rectangle(width - 90, 60, 130, 30, 0x224422)
       .setStrokeStyle(1.5, 0x44aa44).setInteractive({ useHandCursor: true });
     this.add.text(width - 90, 60, '⬆ 升級兵種', { fontSize: '13px', color: '#88ff88' }).setOrigin(0.5);
@@ -102,8 +105,7 @@ export class MenuScene extends Phaser.Scene {
     const container = this.add.container(x, y, [bg, numText, eraText, ...gradeObjs]);
 
     if (isUnlocked) {
-      // ✅ 關鍵修正：interactive 設在 Container 上（加上明確尺寸）
-      // 不設在子物件 bg 上，避免 Phaser 座標計算偏差導致點擊失效
+      // ✅ setInteractive 設在 Container + 明確 setSize
       container.setSize(BTN_W, BTN_H);
       container.setInteractive({ useHandCursor: true })
         .on('pointerover', () => {

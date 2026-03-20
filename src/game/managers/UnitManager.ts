@@ -105,21 +105,21 @@ export class UnitManager {
       // 敵方單位左右翻轉（面向左）
       if (!isPlayer) sprite.setFlipX(true);
     } else {
-      // 後備：用 Graphics 產生一個簡單色塊
-      const visual = UNIT_VISUAL[instance.unitType];
-      const color  = isPlayer ? visual.color : visual.enemyColor;
-      const rt = this.scene.add.renderTexture(instance.x, instance.y, visual.width, visual.height);
-      rt.fill(color, 1);
-      // 轉成 Sprite（用 fallback key）
-      sprite = this.scene.add.sprite(instance.x, instance.y, '__DEFAULT');
-      sprite.setAlpha(0); // 隱藏佔位
-      rt.destroy();
-      // 直接用 Graphics 畫（最簡單後備）
-      const g = this.scene.add.graphics();
-      const w = visual.width, h = visual.height;
-      g.fillStyle(color, 1);
-      g.fillRect(instance.x - w/2, instance.y - h, w, h);
-      // 不存入 unitObjects（會在 syncGraphicsPosition 重繪）
+      // 後備：動態產生純色方塊材質（精靈圖未載入時使用）
+      const visual   = UNIT_VISUAL[instance.unitType];
+      const color    = isPlayer ? visual.color : visual.enemyColor;
+      const fbKey    = `__fallback_${instance.unitType}_${isPlayer ? 'p' : 'e'}`;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (!(this.scene as any).textures.exists(fbKey)) {
+        const fg = this.scene.make.graphics({ x: 0, y: 0, add: false });
+        fg.fillStyle(color, 1);
+        fg.fillRoundedRect(0, 0, visual.width, visual.height * 1.5, 4);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (fg as any).generateTexture(fbKey, visual.width, Math.round(visual.height * 1.5));
+        fg.destroy();
+      }
+      sprite = this.scene.add.sprite(instance.x, instance.y, fbKey);
+      sprite.setOrigin(0.5, 1.0);
     }
 
     sprite.setDepth(30);

@@ -243,7 +243,7 @@ export class UpgradeScene extends Phaser.Scene {
       icon: '🔄', title: '能量回速', subtitle: '每升一級 +0.2 能量/秒',
       currentVal: `${curReg.regenPerSec.toFixed(1)}/秒`,
       nextVal: nextReg ? `${nextReg.regenPerSec.toFixed(1)}/秒` : '—',
-      lv: regLv, maxLv: 11, cost: nextReg?.cost ?? 0,
+      lv: regLv, maxLv: 15, cost: nextReg?.cost ?? 0,
       stat: 'regen', color: 0x152a15, strokeColor: 0x44ff88,
     });
 

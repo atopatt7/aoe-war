@@ -44,6 +44,9 @@ export class CombatManager {
     for (const unit of playerUnits) {
       if (unit.state !== 'attacking') continue;
 
+      // 攻城模式 — 由 checkBaseAttacks 統一處理，跳過一般攻擊邏輯
+      if (unit.targetId === 'ENEMY_BASE') continue;
+
       // 是否冷卻完畢
       if (currentTime - unit.lastAttackTime < unit.attackCooldown) continue;
 
@@ -71,6 +74,9 @@ export class CombatManager {
     // ② 敵人單位攻擊
     for (const unit of enemyUnits) {
       if (unit.state !== 'attacking') continue;
+
+      // 攻城模式 — 由 checkBaseAttacks 統一處理
+      if (unit.targetId === 'PLAYER_BASE') continue;
 
       if (currentTime - unit.lastAttackTime < unit.attackCooldown) continue;
 
@@ -157,28 +163,31 @@ export class CombatManager {
     // 玩家單位攻擊敵方基地
     for (const unit of playerUnits) {
       const distToEnemyBase = Math.abs(unit.x - ENEMY_BASE_X);
+
+      // 進入攻城範圍且尚未攻城 → 切換為攻城模式（停止移動）
       if (distToEnemyBase <= this.BASE_ATTACK_RANGE && unit.state === 'moving') {
-        // 到達敵方基地 → 攻擊基地
         unit.state = 'attacking';
-        // 基地沒有 targetId，用特殊標記
         unit.targetId = 'ENEMY_BASE';
-        enemyBaseDamage += unit.attack;
       }
+
+      // 持續攻城傷害：每秒 = 攻擊力 × 0.5
+      // GameScene 會乘以 (delta/1000)，結果為每秒 attack * 0.5
       if (unit.targetId === 'ENEMY_BASE') {
-        enemyBaseDamage += unit.attack * 0.1; // 持續傷害（每幀的比例）
+        enemyBaseDamage += unit.attack * 0.5;
       }
     }
 
     // 敵人單位攻擊玩家基地
     for (const unit of enemyUnits) {
       const distToPlayerBase = Math.abs(unit.x - PLAYER_BASE_X);
+
       if (distToPlayerBase <= this.BASE_ATTACK_RANGE && unit.state === 'moving') {
         unit.state = 'attacking';
         unit.targetId = 'PLAYER_BASE';
-        playerBaseDamage += unit.attack;
       }
+
       if (unit.targetId === 'PLAYER_BASE') {
-        playerBaseDamage += unit.attack * 0.1;
+        playerBaseDamage += unit.attack * 0.5;
       }
     }
 

@@ -1,9 +1,17 @@
 // ============================================================
 // SpawnManager：敵人自動生成系統
-// 依關卡 waves 設定，定時生成敵人
+// ① 依關卡 waves 設定，定時生成敵人（原有）
+// ② AI 持續出兵系統（金幣累積 + 加權隨機）
 // ============================================================
-import type { LevelData, EnemyWave, Era, UnitType } from '@/types/game';
+import type { LevelData, EnemyWave, Era, UnitType, UnitInstance } from '@/types/game';
 import type { UnitManager } from './UnitManager';
+
+// AI 三種兵種及費用（輕兵/遠程/重甲 映射到現有 UnitType）
+const AI_UNIT_COST: Partial<Record<UnitType, number>> = {
+  swordsman: 10,  // 輕兵
+  archer:    18,  // 遠程
+  tank:      25,  // 重甲
+};
 
 /** 波次執行狀態 */
 interface WaveState {
@@ -25,6 +33,16 @@ export class SpawnManager {
 
   /** 敵人兵種升級數值（關卡越高，敵人越強） */
   private enemyUpgradeLevel: number;
+
+  // ── AI 持續出兵狀態 ──────────────────────────
+  /** AI 目前金幣 */
+  private aiGold: number = 5;
+
+  /** 下次出兵冷卻剩餘（ms）*/
+  private aiCooldown: number = 2000; // 開局 2 秒緩衝
+
+  /** 目前 AI Wave 數（依時間推算） */
+  private aiWave: number = 1;
 
   constructor(unitManager: UnitManager, levelData: LevelData) {
     this.unitManager = unitManager;
@@ -56,10 +74,12 @@ export class SpawnManager {
 
   // ─────────────────────────────────────────────
   // 每幀更新（自動生成敵人）
+  // playerUnits：玩家場上兵種，供 AI 反制邏輯使用
   // ─────────────────────────────────────────────
-  update(currentTime: number): void {
+  update(currentTime: number, delta: number = 16, playerUnits: UnitInstance[] = []): void {
     if (!this.isInitialized) return;
 
+    // ─ 原有 Wave 系統 ─
     for (const ws of this.waveStates) {
       if (ws.done) continue;
 
@@ -84,6 +104,90 @@ export class SpawnManager {
         ws.done = true;
       }
     }
+
+    // ─ AI 持續出兵系統 ─
+    this.updateAI(currentTime, delta, playerUnits);
+  }
+
+  // ─────────────────────────────────────────────
+  // AI 持續出兵（資源累積 + 加權隨機）
+  // ─────────────────────────────────────────────
+  private updateAI(currentTime: number, delta: number, playerUnits: UnitInstance[]): void {
+    // 依遊戲時長計算目前 Wave（每 30 秒升一波）
+    const gameElapsedSec = (currentTime - this.gameStartTime) / 1000;
+    this.aiWave = Math.floor(gameElapsedSec / 30) + 1;
+
+    // 每幀累積金幣：income_per_second / 60
+    // income = min(2 + (wave-1)*0.5, 8) 金/秒
+    const income = Math.min(2 + (this.aiWave - 1) * 0.5, 8);
+    this.aiGold += income * (delta / 1000);
+
+    // 倒扣冷卻
+    this.aiCooldown -= delta;
+    if (this.aiCooldown > 0) return;
+
+    // 金幣不足最便宜兵種
+    const minCost = 10; // swordsman
+    if (this.aiGold < minCost) return;
+
+    // 選擇兵種（加權隨機 + AI 反制）
+    const chosen = this.selectAIUnit(playerUnits, this.aiWave);
+    const cost = AI_UNIT_COST[chosen] ?? minCost;
+
+    if (this.aiGold >= cost) {
+      this.spawnEnemy(chosen);
+      this.aiGold -= cost;
+      this.aiCooldown = 800; // 0.8 秒冷卻
+    } else if (this.aiGold >= minCost) {
+      // 金幣不足，降級為輕兵
+      this.spawnEnemy('swordsman');
+      this.aiGold -= minCost;
+      this.aiCooldown = 800;
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // AI 加權隨機選兵（反制玩家兵種）
+  // ─────────────────────────────────────────────
+  private selectAIUnit(playerUnits: UnitInstance[], wave: number): UnitType {
+    // Wave 1-2：只出輕兵
+    if (wave <= 2) return 'swordsman';
+
+    // 基礎權重
+    let wSword  = 50;
+    let wTank   = wave >= 3 ? 25 : 0;
+    let wArcher = wave >= 5 ? 25 : 0;
+    if (wave < 5) wSword = 100 - wTank; // 補足到 100
+
+    // 統計玩家場上兵種數量
+    const pUnits = playerUnits.filter(u => u.faction === 'player');
+    const nRanged = pUnits.filter(u => u.unitType === 'archer' || u.unitType === 'mage').length;
+    const nHeavy  = pUnits.filter(u => u.unitType === 'tank').length;
+    const nLight  = pUnits.filter(u => u.unitType === 'swordsman').length;
+    const nMax    = Math.max(nRanged, nHeavy, nLight);
+
+    // 動態調整：反制玩家主力
+    if (nMax > 0) {
+      if (nRanged === nMax && wTank > 0) {
+        // 玩家遠程多 → 多出重甲（重甲耐打）
+        wTank   = Math.min(wTank + 20, 65);
+        wSword  = Math.max(wSword - 10, 15);
+        wArcher = Math.max(wArcher - 10, 0);
+      } else if (nHeavy === nMax && wArcher > 0) {
+        // 玩家重甲多 → 多出遠程（遠程繞過）
+        wArcher = Math.min(wArcher + 20, 60);
+        wSword  = Math.max(wSword - 10, 15);
+        wTank   = Math.max(wTank - 10, 5);
+      }
+    }
+
+    // 加權隨機
+    const total = wSword + wTank + wArcher;
+    if (total <= 0) return 'swordsman';
+    const r = Math.random() * total;
+    if (r < wSword)              return 'swordsman';
+    if (r < wSword + wTank)      return 'tank';
+    return 'archer';
   }
 
   // ─────────────────────────────────────────────

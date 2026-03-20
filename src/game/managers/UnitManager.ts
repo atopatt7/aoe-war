@@ -278,15 +278,22 @@ export class UnitManager {
     const isPlayer = inst.faction === 'player';
     const moveDir = isPlayer ? 1 : -1;
 
-    // ① 找到最近的敵人
+    // ① 攻城模式：原地停止，不切換目標、不移動
+    //    敵方單位仍可攻擊本單位（死亡邏輯由 CombatManager 處理）
+    if (inst.targetId === 'ENEMY_BASE' || inst.targetId === 'PLAYER_BASE') {
+      this.syncGraphicsPosition(obj);
+      return;
+    }
+
+    // ② 找到最近的敵人
     const nearest = this.findNearestEnemy(inst, enemies);
 
     if (nearest && Math.abs(nearest.x - inst.x) <= inst.range) {
-      // ② 敵人在射程內 → 停止並攻擊
+      // ③ 敵人在射程內 → 停止並攻擊
       inst.state = 'attacking';
       inst.targetId = nearest.id;
     } else {
-      // ③ 繼續前進
+      // ④ 繼續前進
       inst.state = 'moving';
       inst.targetId = null;
       inst.x += inst.speed * moveDir * (delta / 1000);

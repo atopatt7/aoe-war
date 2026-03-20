@@ -132,7 +132,7 @@ export class GameScene extends Phaser.Scene {
     if (result.enemyBaseDamage > 0)
       this.enemyBaseHp  = Math.max(0, this.enemyBaseHp  - result.enemyBaseDamage * (delta / 1000));
 
-    this.spawnManager.update(time);
+    this.spawnManager.update(time, delta, this.unitManager.getPlayerUnits());
 
     this.uiManager.update(
       this.energyManager.energy,

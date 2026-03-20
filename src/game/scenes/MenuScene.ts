@@ -1,7 +1,7 @@
 // ============================================================
 // MenuScene.ts — 主選單
-// ✅ 關鍵修正：改用 preload() + 同步 create()
-//    Phaser 不會 await async create()，必須在 preload 載入資料
+// ✅ 修正：改用 scene 層級 input.on('pointerdown') + 座標比對
+//    完全繞開 Container setInteractive 與 Scale Manager 的相容性問題
 // ============================================================
 import Phaser from 'phaser';
 import type { PlayerSave, LevelData } from '@/types/game';
@@ -15,28 +15,83 @@ const START_X = 60, START_Y = 130;
 export class MenuScene extends Phaser.Scene {
   private playerSave!: PlayerSave;
   private levelsData: LevelData[] = [];
+  // 存放每個按鈕的背景 Rectangle，供 hover 效果使用
+  private btnBgs: Map<number, Phaser.GameObjects.Rectangle> = new Map();
+  private btnDefaultColors: Map<number, number> = new Map();
 
   constructor() { super({ key: 'MenuScene' }); }
 
-  // ✅ 用 Phaser 內建 loader 在 preload 階段載入 JSON
-  //    Phaser 會 await loader，完成後才進入 create()
+  // ✅ Phaser 內建 loader — create() 進入前保證資料已載入
   preload(): void {
     this.load.json('levels', '/api/game-data?type=levels');
   }
 
-  // ✅ create() 改為同步 — 從 cache 讀取已載入的資料
   create(): void {
     this.cameras.main.setBackgroundColor('#0d0d1a');
+    this.btnBgs.clear();
+    this.btnDefaultColors.clear();
 
-    // 從 Phaser cache 讀取（preload 已保證載入完成）
     this.levelsData = this.cache.json.get('levels') ?? [];
     this.playerSave = SaveManager.load();
 
     this.drawHeader();
     this.drawLevelGrid();
     this.drawFooter();
+
+    // ✅ 用 scene 層級 input 處理所有點擊
+    //    pointer.x / pointer.y 在 Phaser 3 中已是 game 座標（Scale Manager 已換算）
+    this.input.on('pointerdown', (pointer: any) => {
+      this.handlePointerDown(pointer.x, pointer.y);
+    });
+
+    // hover 效果（pointermove）
+    this.input.on('pointermove', (pointer: any) => {
+      this.handlePointerMove(pointer.x, pointer.y);
+    });
   }
 
+  // ─── 點擊處理（game 座標比對）────────────────────────────
+  private handlePointerDown(x: number, y: number): void {
+    const { width } = this.cameras.main;
+
+    // 升級按鈕區域（右上角）
+    if (Math.abs(x - (width - 90)) <= 65 && Math.abs(y - 60) <= 15) {
+      this.scene.start('UpgradeScene', { playerSave: this.playerSave });
+      return;
+    }
+
+    // 關卡按鈕
+    for (let i = 0; i < 100; i++) {
+      const levelId = i + 1;
+      if (levelId > this.playerSave.unlockedLevels) continue; // 鎖定的關卡跳過
+
+      const col = i % LEVELS_PER_ROW;
+      const row = Math.floor(i / LEVELS_PER_ROW);
+      const bx  = START_X + col * (BTN_W + BTN_GAP_X);
+      const by  = START_Y + row * (BTN_H + BTN_GAP_Y);
+
+      if (Math.abs(x - bx) <= BTN_W / 2 && Math.abs(y - by) <= BTN_H / 2) {
+        this.scene.start('GameScene', { levelId, playerSave: this.playerSave });
+        return;
+      }
+    }
+  }
+
+  // ─── Hover 效果（pointermove）────────────────────────────
+  private handlePointerMove(x: number, y: number): void {
+    this.btnBgs.forEach((bg, levelId) => {
+      const i   = levelId - 1;
+      const col = i % LEVELS_PER_ROW;
+      const row = Math.floor(i / LEVELS_PER_ROW);
+      const bx  = START_X + col * (BTN_W + BTN_GAP_X);
+      const by  = START_Y + row * (BTN_H + BTN_GAP_Y);
+
+      const isHovered = Math.abs(x - bx) <= BTN_W / 2 && Math.abs(y - by) <= BTN_H / 2;
+      bg.setFillStyle(isHovered ? 0x2255aa : (this.btnDefaultColors.get(levelId) ?? 0x1a3a5c));
+    });
+  }
+
+  // ─── 畫面元素 ─────────────────────────────────────────────
   private drawHeader(): void {
     const { width } = this.cameras.main;
 
@@ -52,14 +107,9 @@ export class MenuScene extends Phaser.Scene {
       fontSize: '16px', color: '#88ccff',
     });
 
-    const upgradeBtn = this.add.rectangle(width - 90, 60, 130, 30, 0x224422)
-      .setStrokeStyle(1.5, 0x44aa44).setInteractive({ useHandCursor: true });
+    // 升級按鈕（視覺用，點擊由 handlePointerDown 處理）
+    this.add.rectangle(width - 90, 60, 130, 30, 0x224422).setStrokeStyle(1.5, 0x44aa44);
     this.add.text(width - 90, 60, '⬆ 升級兵種', { fontSize: '13px', color: '#88ff88' }).setOrigin(0.5);
-    upgradeBtn.on('pointerdown', () => {
-      this.scene.start('UpgradeScene', { playerSave: this.playerSave });
-    });
-    upgradeBtn.on('pointerover', () => upgradeBtn.setFillStyle(0x336633));
-    upgradeBtn.on('pointerout',  () => upgradeBtn.setFillStyle(0x224422));
 
     this.add.rectangle(width / 2, 95, width - 40, 2, 0x333366).setOrigin(0.5);
     this.add.text(20, 105, '── 關卡選擇 ──', { fontSize: '13px', color: '#888888' });
@@ -67,15 +117,13 @@ export class MenuScene extends Phaser.Scene {
 
   private drawLevelGrid(): void {
     for (let i = 0; i < 100; i++) {
-      const levelId = i + 1;
-      const col = i % LEVELS_PER_ROW;
-      const row = Math.floor(i / LEVELS_PER_ROW);
-      const x = START_X + col * (BTN_W + BTN_GAP_X);
-      const y = START_Y + row * (BTN_H + BTN_GAP_Y);
-      this.createLevelButton(x, y, levelId,
-        levelId <= this.playerSave.unlockedLevels,
-        this.playerSave.levelGrades[levelId]
-      );
+      const levelId   = i + 1;
+      const isUnlocked = levelId <= this.playerSave.unlockedLevels;
+      const col       = i % LEVELS_PER_ROW;
+      const row       = Math.floor(i / LEVELS_PER_ROW);
+      const x         = START_X + col * (BTN_W + BTN_GAP_X);
+      const y         = START_Y + row * (BTN_H + BTN_GAP_Y);
+      this.createLevelButton(x, y, levelId, isUnlocked, this.playerSave.levelGrades[levelId]);
     }
   }
 
@@ -90,35 +138,22 @@ export class MenuScene extends Phaser.Scene {
     const levelData = this.levelsData.find(l => l.id === levelId);
     const eraShort  = levelData ? ERA_NAMES[levelData.enemyEra]?.charAt(0) ?? '' : '';
 
-    const bg      = this.add.rectangle(0, 0, BTN_W, BTN_H, bgColor).setStrokeStyle(1.5, borderColor);
-    const numText = this.add.text(0, -8, `${levelId}`, { fontSize: '14px', color: textColor, fontStyle: 'bold' }).setOrigin(0.5);
-    const eraText = this.add.text(0, 8, eraShort, { fontSize: '10px', color: isUnlocked ? '#aaaacc' : '#444444' }).setOrigin(0.5);
+    // ✅ 純視覺 Rectangle（不呼叫 setInteractive）
+    const bg = this.add.rectangle(x, y, BTN_W, BTN_H, bgColor).setStrokeStyle(1.5, borderColor);
+    this.add.text(x, y - 8, `${levelId}`, { fontSize: '14px', color: textColor, fontStyle: 'bold' }).setOrigin(0.5);
+    this.add.text(x, y + 8, eraShort, { fontSize: '10px', color: isUnlocked ? '#aaaacc' : '#444444' }).setOrigin(0.5);
 
-    const gradeObjs: Phaser.GameObjects.GameObject[] = [];
     if (grade) {
       const gc: Record<string, string> = { S: '#FFD700', A: '#00ccff', B: '#88ff88', C: '#aaaaaa' };
-      gradeObjs.push(this.add.text(BTN_W / 2 - 8, -BTN_H / 2 + 6, grade, {
+      this.add.text(x + BTN_W / 2 - 8, y - BTN_H / 2 + 6, grade, {
         fontSize: '11px', color: gc[grade] ?? '#ffffff', fontStyle: 'bold',
-      }).setOrigin(0.5));
+      }).setOrigin(0.5);
     }
 
-    const container = this.add.container(x, y, [bg, numText, eraText, ...gradeObjs]);
-
+    // 只有解鎖的關卡才記錄到 map，供 hover/click 用
     if (isUnlocked) {
-      // ✅ setInteractive 設在 Container + 明確 setSize
-      container.setSize(BTN_W, BTN_H);
-      container.setInteractive({ useHandCursor: true })
-        .on('pointerover', () => {
-          bg.setFillStyle(0x2255aa);
-          this.tweens.add({ targets: container, scaleX: 1.06, scaleY: 1.06, duration: 80 });
-        })
-        .on('pointerout', () => {
-          bg.setFillStyle(bgColor);
-          this.tweens.add({ targets: container, scaleX: 1, scaleY: 1, duration: 80 });
-        })
-        .on('pointerdown', () => {
-          this.scene.start('GameScene', { levelId, playerSave: this.playerSave });
-        });
+      this.btnBgs.set(levelId, bg);
+      this.btnDefaultColors.set(levelId, bgColor);
     }
   }
 

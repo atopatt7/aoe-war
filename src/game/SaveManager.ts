@@ -146,7 +146,7 @@ export class SaveManager {
       energyCap: 'baseEnergyCapLevel' as const,
       regen:     'baseRegenLevel'     as const,
     };
-    const MAX_MAP = { hp: 10, energyCap: 8, regen: 15 };
+    const MAX_MAP = { hp: 10, energyCap: 19, regen: 15 };
     const key = KEY_MAP[stat];
 
     if ((save[key] as number) >= MAX_MAP[stat]) return null; // 已最高級

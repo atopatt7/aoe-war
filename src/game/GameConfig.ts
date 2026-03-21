@@ -24,18 +24,29 @@ export const BASE_HP_UPGRADES: Array<{
   { level: 10, hp: 8000, maxUnitEra: 'space', cost: 5000 },
 ];
 
-/** 能量上限升級表（共 8 級，每升一級 +5 能量） */
+/** 能量上限升級表（共 19 級，每升一級 +5 能量，上限 100） */
 export const BASE_ENERGY_CAP_UPGRADES: Array<{
   level: number; maxEnergy: number; cost: number;
 }> = [
-  { level: 1, maxEnergy: 10, cost: 0    },
-  { level: 2, maxEnergy: 15, cost: 80   },
-  { level: 3, maxEnergy: 20, cost: 160  },
-  { level: 4, maxEnergy: 25, cost: 280  },
-  { level: 5, maxEnergy: 30, cost: 450  },
-  { level: 6, maxEnergy: 35, cost: 700  },
-  { level: 7, maxEnergy: 40, cost: 1000 },
-  { level: 8, maxEnergy: 45, cost: 1350 },
+  { level:  1, maxEnergy:  10, cost: 0    },
+  { level:  2, maxEnergy:  15, cost: 80   },
+  { level:  3, maxEnergy:  20, cost: 160  },
+  { level:  4, maxEnergy:  25, cost: 280  },
+  { level:  5, maxEnergy:  30, cost: 450  },
+  { level:  6, maxEnergy:  35, cost: 700  },
+  { level:  7, maxEnergy:  40, cost: 1000 },
+  { level:  8, maxEnergy:  45, cost: 1350 },
+  { level:  9, maxEnergy:  50, cost: 1800 },
+  { level: 10, maxEnergy:  55, cost: 2350 },
+  { level: 11, maxEnergy:  60, cost: 3000 },
+  { level: 12, maxEnergy:  65, cost: 3800 },
+  { level: 13, maxEnergy:  70, cost: 4700 },
+  { level: 14, maxEnergy:  75, cost: 5800 },
+  { level: 15, maxEnergy:  80, cost: 7000 },
+  { level: 16, maxEnergy:  85, cost: 8400 },
+  { level: 17, maxEnergy:  90, cost: 10000 },
+  { level: 18, maxEnergy:  95, cost: 12000 },
+  { level: 19, maxEnergy: 100, cost: 14500 },
 ];
 
 /** 能量回復速度升級表（共 15 級，regenPerSec = 每秒回復能量，基礎 0.2，每升一級 +0.2，上限 3.0） */

@@ -123,22 +123,36 @@ export class UpgradeScene extends Phaser.Scene {
     const currentLv  = this.playerSave.unitUpgrades[unitType] ?? 0;
     const eraIdx     = Math.min(4, Math.floor(currentLv / 10));
     const currentEra = ERA_ORDER[eraIdx];
+    const inSpaceEra = eraIdx >= 4;           // 太空時代無上限
     const nextLv     = currentLv + 1;
-    const nextUpgrade = upgradeData.levels.find(l => l.level === nextLv);
-    const isMaxLevel  = currentLv >= 50;
+
+    // 升級費用：太空時代超出表格時，依等級動態計算（每級+600）
+    const tableUpgrade = upgradeData.levels.find(l => l.level === nextLv);
+    const nextUpgradeCost = tableUpgrade
+      ? tableUpgrade.cost
+      : (upgradeData.levels[upgradeData.levels.length - 1].cost + (nextLv - 50) * 600);
+    const nextUpgrade = tableUpgrade ?? (inSpaceEra ? { level: nextLv, cost: nextUpgradeCost } : null);
+
+    // 太空時代永不封頂；其他時代最高 50 級
+    const isMaxLevel = !inSpaceEra && currentLv >= 50;
 
     // 資訊卡
     const cardBg = this.add.rectangle(W / 2, TOP + 70, W - 40, 120, 0x1a1a33).setStrokeStyle(2, ERA_COLORS[currentEra]).setDepth(20);
     this.contentContainer.add(cardBg);
     this.contentContainer.add(this.add.text(W / 2, TOP + 20, `${UNIT_ICONS[UNIT_TYPES.indexOf(unitType)]} ${UNIT_NAMES[unitType]}`, { fontSize: '22px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5).setDepth(21));
-    this.contentContainer.add(this.add.text(W / 2, TOP + 48, `目前時代：${ERA_NAMES[currentEra]}　　等級：${currentLv} / 50`, { fontSize: '14px', color: '#aaaacc' }).setOrigin(0.5).setDepth(21));
+    const lvLabel = inSpaceEra ? `目前時代：${ERA_NAMES[currentEra]}　　等級：${currentLv}（無上限）` : `目前時代：${ERA_NAMES[currentEra]}　　等級：${currentLv} / 50`;
+    this.contentContainer.add(this.add.text(W / 2, TOP + 48, lvLabel, { fontSize: '14px', color: '#aaaacc' }).setOrigin(0.5).setDepth(21));
 
     // 進化進度條
     const inEraLv = currentLv % 10;
     for (let i = 0; i < 10; i++) {
       this.contentContainer.add(this.add.rectangle(W / 2 - 100 + i * 22, TOP + 72, 18, 14, i < inEraLv ? 0xFFD700 : 0x222244).setStrokeStyle(1, 0x555577).setDepth(21));
     }
-    const toNextLabel = isMaxLevel ? '已達最高等級' : eraIdx < 4 ? `再升 ${10 - inEraLv} 次 → ${ERA_NAMES[ERA_ORDER[eraIdx + 1]]}` : '已達最高時代';
+    const toNextLabel = isMaxLevel
+      ? '已達最高等級'
+      : eraIdx < 4
+        ? `再升 ${10 - inEraLv} 次 → ${ERA_NAMES[ERA_ORDER[eraIdx + 1]]}`
+        : '🚀 太空時代・無限升級';
     this.contentContainer.add(this.add.text(W / 2, TOP + 90, toNextLabel, { fontSize: '12px', color: '#FFD700' }).setOrigin(0.5).setDepth(21));
 
     // 數值對比（套用每升級 +3% 的 bonusRate）
@@ -168,17 +182,17 @@ export class UpgradeScene extends Phaser.Scene {
     });
 
     // 升級按鈕
-    const canAfford = !isMaxLevel && !!nextUpgrade && this.playerSave.gold >= nextUpgrade.cost;
+    const canAfford = !isMaxLevel && !!nextUpgrade && this.playerSave.gold >= nextUpgradeCost;
     const btnY = GAME_HEIGHT - 50;
     const btnBg = this.add.rectangle(W / 2, btnY, W - 60, 52, canAfford ? 0xcc9900 : 0x444444).setStrokeStyle(2, 0xffffff).setDepth(21).setInteractive({ useHandCursor: canAfford });
     this.contentContainer.add(btnBg);
     this.contentContainer.add(this.add.text(W / 2, btnY - 8, isMaxLevel ? '已達最高等級' : `⬆ 升級到 Lv.${nextLv}`, { fontSize: '16px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5).setDepth(22));
-    this.contentContainer.add(this.add.text(W / 2, btnY + 12, isMaxLevel ? '' : nextUpgrade ? `💰 ${nextUpgrade.cost} 金幣` : '—', { fontSize: '13px', color: canAfford ? '#FFD700' : '#888888' }).setOrigin(0.5).setDepth(22));
+    this.contentContainer.add(this.add.text(W / 2, btnY + 12, isMaxLevel ? '' : `💰 ${nextUpgradeCost} 金幣`, { fontSize: '13px', color: canAfford ? '#FFD700' : '#888888' }).setOrigin(0.5).setDepth(22));
 
     if (canAfford && nextUpgrade) {
       btnBg.on('pointerdown', () => {
         // ✅ 用 SaveManager 扣金幣並儲存
-        const updated = SaveManager.saveUnitUpgrade(this.playerSave, unitType, nextUpgrade.cost);
+        const updated = SaveManager.saveUnitUpgrade(this.playerSave, unitType, nextUpgradeCost);
         if (updated) {
           this.playerSave = updated;
           this.goldText.setText(`💰 ${this.playerSave.gold}`);
@@ -239,7 +253,7 @@ export class UpgradeScene extends Phaser.Scene {
       icon: '⚡', title: '能量上限', subtitle: '提高可同時蓄積的能量',
       currentVal: `${curCap.maxEnergy} 能量`,
       nextVal: nextCap ? `${nextCap.maxEnergy} 能量` : '—',
-      lv: capLv, maxLv: 8, cost: nextCap?.cost ?? 0,
+      lv: capLv, maxLv: 19, cost: nextCap?.cost ?? 0,
       stat: 'energyCap', color: 0x1a2a3a, strokeColor: 0x44aaff,
     });
 
@@ -249,7 +263,7 @@ export class UpgradeScene extends Phaser.Scene {
       icon: '🔄', title: '能量回速', subtitle: '每升一級 +0.2 能量/秒',
       currentVal: `${curReg.regenPerSec.toFixed(1)}/秒`,
       nextVal: nextReg ? `${nextReg.regenPerSec.toFixed(1)}/秒` : '—',
-      lv: regLv, maxLv: 15, cost: nextReg?.cost ?? 0,
+      lv: regLv, maxLv: 50, cost: nextReg?.cost ?? 0,
       stat: 'regen', color: 0x152a15, strokeColor: 0x44ff88,
     });
 

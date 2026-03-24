@@ -144,9 +144,18 @@ export function createGameConfig(scenes: any[]): Record<string, unknown> {
       default: 'arcade',
       arcade: { debug: false },
     },
+
+    // ── 手機省電優化 ──────────────────────────────────────────
+    // 限制 30fps，降低 GPU/CPU 負擔，避免手機過熱
+    fps: {
+      target: 30,
+      forceSetTimeOut: true,   // 用 setTimeout 取代 rAF，降低後台耗電
+    },
     render: {
-      pixelArt: false,
-      antialias: true,
+      pixelArt: true,          // 停用反鋸齒（省 GPU），像素風格更清晰
+      antialias: false,
+      roundPixels: true,       // 像素對齊，減少模糊計算
+      powerPreference: 'low-power',  // WebGL 要求省電模式
     },
   };
 }

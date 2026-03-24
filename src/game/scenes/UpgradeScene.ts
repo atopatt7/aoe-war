@@ -18,6 +18,12 @@ const UNIT_TYPES: UnitType[] = ['swordsman', 'archer', 'tank', 'mage'];
 const UNIT_ICONS = ['⚔', '🏹', '🛡', '🔮'];
 const TAB_COLORS = [0x1a3a7a, 0x1a5a1a, 0x5a3a1a, 0x4a1a5a];
 
+// 返回按鈕點擊區尺寸
+const BACK_HIT_W = 130;
+const BACK_HIT_H = 44;
+const BACK_X     = 90;
+const BACK_Y     = 22;
+
 export class UpgradeScene extends Phaser.Scene {
   private playerSave!: PlayerSave;
   private unitsData: UnitData[] = [];
@@ -27,11 +33,11 @@ export class UpgradeScene extends Phaser.Scene {
   private tabContainers: Phaser.GameObjects.Container[] = [];
   private contentContainer!: Phaser.GameObjects.Container;
   private goldText!: Phaser.GameObjects.Text;
+  private resetDialogContainer: Phaser.GameObjects.Container | null = null;
 
   constructor() { super({ key: 'UpgradeScene' }); }
 
   init(data: { playerSave?: PlayerSave; selectedTab?: number }): void {
-    // ✅ 永遠從 localStorage 讀取最新存檔（不依賴傳入的 playerSave）
     this.playerSave  = SaveManager.load();
     this.selectedTab = data.selectedTab ?? 0;
   }
@@ -62,13 +68,16 @@ export class UpgradeScene extends Phaser.Scene {
     const W = GAME_WIDTH;
     this.add.rectangle(W / 2, 22, W, 44, 0x000000, 0.85).setDepth(10);
 
-    // 返回按鈕：遠離螢幕邊角，避免 iOS 系統手勢區域干擾
-    // 用透明矩形擴大點擊範圍（80×44px 可觸控區）
-    const backHitZone = this.add.rectangle(55, 22, 80, 44, 0x000000, 0)
-      .setDepth(11).setInteractive({ useHandCursor: true });
-    const backBtn = this.add.text(55, 22, '← 返回', {
+    // ── 返回按鈕 ───────────────────────────────────────────────
+    // 綠色外框顯示實際觸控範圍，遠離螢幕邊角
+    this.add.rectangle(BACK_X, BACK_Y, BACK_HIT_W, BACK_HIT_H, 0x000000, 0)
+      .setStrokeStyle(2, 0x00ff44)   // 綠色外框（方便確認觸控範圍）
+      .setDepth(11);
+    const backHitZone = this.add.rectangle(BACK_X, BACK_Y, BACK_HIT_W, BACK_HIT_H, 0x000000, 0)
+      .setDepth(12).setInteractive({ useHandCursor: true });
+    const backBtn = this.add.text(BACK_X, BACK_Y, '← 返回', {
       fontSize: '16px', color: '#aaaaff',
-    }).setOrigin(0.5).setDepth(12);
+    }).setOrigin(0.5).setDepth(13);
     const doBack = () => this.scene.start('MenuScene');
     backHitZone.on('pointerdown', doBack);
     backHitZone.on('pointerover',  () => backBtn.setColor('#ffffff'));
@@ -101,7 +110,7 @@ export class UpgradeScene extends Phaser.Scene {
       bg.on('pointerover', () => bg.setFillStyle(tab.color + 0x111111));
       bg.on('pointerout',  () => bg.setFillStyle(tab.color));
       const tabCont = this.add.container(0, 0, [bg, lbl, line]);
-      tabCont.setDepth(15); // 必須大於背景板 depth=9，否則 Container 整體被蓋住
+      tabCont.setDepth(15);
       this.tabContainers.push(tabCont as unknown as Phaser.GameObjects.Container);
     });
   }
@@ -109,7 +118,7 @@ export class UpgradeScene extends Phaser.Scene {
   private renderContent(): void {
     this.contentContainer?.destroy();
     this.contentContainer = this.add.container(0, 0);
-    this.contentContainer.setDepth(15); // 必須大於背景板 depth=9
+    this.contentContainer.setDepth(15);
     if (this.selectedTab < 4) this.renderUnitUpgrade(UNIT_TYPES[this.selectedTab]);
     else this.renderBaseUpgrade();
   }
@@ -123,27 +132,23 @@ export class UpgradeScene extends Phaser.Scene {
     const currentLv  = this.playerSave.unitUpgrades[unitType] ?? 0;
     const eraIdx     = Math.min(4, Math.floor(currentLv / 10));
     const currentEra = ERA_ORDER[eraIdx];
-    const inSpaceEra = eraIdx >= 4;           // 太空時代無上限
+    const inSpaceEra = eraIdx >= 4;
     const nextLv     = currentLv + 1;
 
-    // 升級費用：太空時代超出表格時，依等級動態計算（每級+600）
     const tableUpgrade = upgradeData.levels.find(l => l.level === nextLv);
     const nextUpgradeCost = tableUpgrade
       ? tableUpgrade.cost
       : (upgradeData.levels[upgradeData.levels.length - 1].cost + (nextLv - 50) * 600);
     const nextUpgrade = tableUpgrade ?? (inSpaceEra ? { level: nextLv, cost: nextUpgradeCost } : null);
 
-    // 太空時代永不封頂；其他時代最高 50 級
     const isMaxLevel = !inSpaceEra && currentLv >= 50;
 
-    // 資訊卡
     const cardBg = this.add.rectangle(W / 2, TOP + 70, W - 40, 120, 0x1a1a33).setStrokeStyle(2, ERA_COLORS[currentEra]).setDepth(20);
     this.contentContainer.add(cardBg);
     this.contentContainer.add(this.add.text(W / 2, TOP + 20, `${UNIT_ICONS[UNIT_TYPES.indexOf(unitType)]} ${UNIT_NAMES[unitType]}`, { fontSize: '22px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5).setDepth(21));
     const lvLabel = inSpaceEra ? `目前時代：${ERA_NAMES[currentEra]}　　等級：${currentLv}（無上限）` : `目前時代：${ERA_NAMES[currentEra]}　　等級：${currentLv} / 50`;
     this.contentContainer.add(this.add.text(W / 2, TOP + 48, lvLabel, { fontSize: '14px', color: '#aaaacc' }).setOrigin(0.5).setDepth(21));
 
-    // 進化進度條
     const inEraLv = currentLv % 10;
     for (let i = 0; i < 10; i++) {
       this.contentContainer.add(this.add.rectangle(W / 2 - 100 + i * 22, TOP + 72, 18, 14, i < inEraLv ? 0xFFD700 : 0x222244).setStrokeStyle(1, 0x555577).setDepth(21));
@@ -155,7 +160,6 @@ export class UpgradeScene extends Phaser.Scene {
         : '🚀 太空時代・無限升級';
     this.contentContainer.add(this.add.text(W / 2, TOP + 90, toNextLabel, { fontSize: '12px', color: '#FFD700' }).setOrigin(0.5).setDepth(21));
 
-    // 數值對比（套用每升級 +3% 的 bonusRate）
     const bonusRate     = 1 + currentLv * 0.03;
     const nextBonusRate = 1 + nextLv    * 0.03;
     const nextEra       = ERA_ORDER[Math.min(4, Math.floor(nextLv / 10))];
@@ -172,7 +176,6 @@ export class UpgradeScene extends Phaser.Scene {
       this.contentContainer.add(this.add.text(W / 2 + 20, y, `→ ${nxt}`, { fontSize: '13px', color: (nxt as number) > (cur as number) ? '#88ff88' : '#aaaaaa' }).setDepth(21));
     });
 
-    // 費用表
     const costY = statY + 100;
     this.contentContainer.add(this.add.text(W / 2, costY, '⚡ 出兵費用（各時代固定）', { fontSize: '12px', color: '#88ffff' }).setOrigin(0.5).setDepth(21));
     UNIT_ENERGY_COST[unitType].forEach((cost, i) => {
@@ -181,7 +184,6 @@ export class UpgradeScene extends Phaser.Scene {
       this.contentContainer.add(this.add.text(cx, costY + 36, `⚡${cost}`, { fontSize: '13px', color: '#aaddff', fontStyle: 'bold' }).setOrigin(0.5).setDepth(21));
     });
 
-    // 升級按鈕
     const canAfford = !isMaxLevel && !!nextUpgrade && this.playerSave.gold >= nextUpgradeCost;
     const btnY = GAME_HEIGHT - 50;
     const btnBg = this.add.rectangle(W / 2, btnY, W - 60, 52, canAfford ? 0xcc9900 : 0x444444).setStrokeStyle(2, 0xffffff).setDepth(21).setInteractive({ useHandCursor: canAfford });
@@ -191,7 +193,6 @@ export class UpgradeScene extends Phaser.Scene {
 
     if (canAfford && nextUpgrade) {
       btnBg.on('pointerdown', () => {
-        // ✅ 用 SaveManager 扣金幣並儲存
         const updated = SaveManager.saveUnitUpgrade(this.playerSave, unitType, nextUpgradeCost);
         if (updated) {
           this.playerSave = updated;
@@ -205,7 +206,7 @@ export class UpgradeScene extends Phaser.Scene {
   }
 
   // ─────────────────────────────────────────────────────────
-  // 主基地升級：三張獨立升級卡（血量 / 能量上限 / 能量回速）
+  // 主基地升級
   // ─────────────────────────────────────────────────────────
   private renderBaseUpgrade(): void {
     const W = GAME_WIDTH, TOP = 88;
@@ -221,9 +222,8 @@ export class UpgradeScene extends Phaser.Scene {
       }).setOrigin(0.5).setDepth(21)
     );
 
-    // 三張卡片水平排列
     const cardW   = Math.floor((W - 80) / 3);
-    const cardH   = 330;
+    const cardH   = 310;
     const cardY   = TOP + 60 + cardH / 2;
     const cards: Array<{
       icon: string; title: string; subtitle: string;
@@ -272,12 +272,10 @@ export class UpgradeScene extends Phaser.Scene {
       const isMax     = card.lv >= card.maxLv;
       const canAfford = !isMax && this.playerSave.gold >= card.cost;
 
-      // 卡片背景
       const cardBg = this.add.rectangle(cx, cardY, cardW, cardH, card.color)
         .setStrokeStyle(2, isMax ? 0x888888 : card.strokeColor).setDepth(21);
       this.contentContainer.add(cardBg);
 
-      // 標題列
       this.contentContainer.add(
         this.add.text(cx, cardY - cardH / 2 + 22, `${card.icon} ${card.title}`, {
           fontSize: '16px', color: '#ffffff', fontStyle: 'bold',
@@ -289,7 +287,6 @@ export class UpgradeScene extends Phaser.Scene {
         }).setOrigin(0.5).setDepth(22)
       );
 
-      // 等級條
       const lvBarY = cardY - cardH / 2 + 70;
       this.contentContainer.add(
         this.add.text(cx, lvBarY, `Lv.${card.lv} / ${card.maxLv}`, {
@@ -306,46 +303,42 @@ export class UpgradeScene extends Phaser.Scene {
         );
       }
 
-      // 分隔線
       this.contentContainer.add(
         this.add.rectangle(cx, cardY - cardH / 2 + 108, cardW - 20, 1, 0x333355).setDepth(22)
       );
 
-      // 目前數值
       this.contentContainer.add(
         this.add.text(cx, cardY - cardH / 2 + 124, '目前', {
           fontSize: '11px', color: '#666688',
         }).setOrigin(0.5).setDepth(22)
       );
       this.contentContainer.add(
-        this.add.text(cx, cardY - cardH / 2 + 150, card.currentVal, {
+        this.add.text(cx, cardY - cardH / 2 + 148, card.currentVal, {
           fontSize: '15px', color: '#ffffff', align: 'center',
         }).setOrigin(0.5).setDepth(22)
       );
 
-      // 箭頭 + 升級後數值
       if (!isMax) {
         this.contentContainer.add(
-          this.add.text(cx, cardY - cardH / 2 + 196, '↓ 升級後', {
+          this.add.text(cx, cardY - cardH / 2 + 186, '↓ 升級後', {
             fontSize: '11px', color: '#666688',
           }).setOrigin(0.5).setDepth(22)
         );
         this.contentContainer.add(
-          this.add.text(cx, cardY - cardH / 2 + 222, card.nextVal, {
+          this.add.text(cx, cardY - cardH / 2 + 210, card.nextVal, {
             fontSize: '15px', color: '#aaffaa', align: 'center',
           }).setOrigin(0.5).setDepth(22)
         );
       } else {
         this.contentContainer.add(
-          this.add.text(cx, cardY - cardH / 2 + 210, '✅ 已達最高等級', {
+          this.add.text(cx, cardY - cardH / 2 + 196, '✅ 已達最高等級', {
             fontSize: '13px', color: '#FFD700', align: 'center',
           }).setOrigin(0.5).setDepth(22)
         );
       }
 
-      // 升級按鈕
-      const btnY   = cardY + cardH / 2 - 30;
-      const btnBg  = this.add.rectangle(cx, btnY, cardW - 20, 42,
+      const btnY   = cardY + cardH / 2 - 28;
+      const btnBg  = this.add.rectangle(cx, btnY, cardW - 20, 40,
         canAfford ? (0x111111 | (card.strokeColor & 0x444444)) : 0x222222)
         .setStrokeStyle(1.5, canAfford ? card.strokeColor : 0x444444)
         .setDepth(22)
@@ -385,5 +378,89 @@ export class UpgradeScene extends Phaser.Scene {
         }
       }
     });
+
+    // ── 重置紀錄按鈕 ─────────────────────────────────────────
+    const resetY = GAME_HEIGHT - 44;
+    // 紅色警示背景
+    const resetBg = this.add.rectangle(W / 2, resetY, 320, 44, 0x550000)
+      .setStrokeStyle(2, 0xff3333)
+      .setDepth(21)
+      .setInteractive({ useHandCursor: true });
+    this.contentContainer.add(resetBg);
+    this.contentContainer.add(
+      this.add.text(W / 2, resetY - 8, '⚠  重置所有紀錄', {
+        fontSize: '15px', color: '#ff6666', fontStyle: 'bold',
+      }).setOrigin(0.5).setDepth(22)
+    );
+    this.contentContainer.add(
+      this.add.text(W / 2, resetY + 10, '清除金幣、升級、進度（不可復原）', {
+        fontSize: '11px', color: '#aa4444',
+      }).setOrigin(0.5).setDepth(22)
+    );
+    resetBg.on('pointerdown', () => this.showResetConfirmDialog());
+    resetBg.on('pointerover',  () => resetBg.setFillStyle(0x880000));
+    resetBg.on('pointerout',   () => resetBg.setFillStyle(0x550000));
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // 重置確認對話框（全螢幕遮罩）
+  // ─────────────────────────────────────────────────────────
+  private showResetConfirmDialog(): void {
+    if (this.resetDialogContainer) return; // 防止重複開啟
+
+    const W = GAME_WIDTH, H = GAME_HEIGHT;
+    const dlg = this.add.container(0, 0).setDepth(200);
+    this.resetDialogContainer = dlg;
+
+    // 半透明遮罩
+    dlg.add(this.add.rectangle(W / 2, H / 2, W, H, 0x000000, 0.78));
+
+    // 警示框
+    dlg.add(this.add.rectangle(W / 2, H / 2, 520, 280, 0x1a0000)
+      .setStrokeStyle(3, 0xff3333));
+
+    // 警示文字
+    dlg.add(this.add.text(W / 2, H / 2 - 100, '⚠  警告  ⚠', {
+      fontSize: '28px', color: '#ff3333', fontStyle: 'bold',
+    }).setOrigin(0.5));
+
+    dlg.add(this.add.text(W / 2, H / 2 - 50,
+      '這將清除所有升級紀錄\n包含金幣、兵種升級、基地升級\n\n此操作無法復原！', {
+        fontSize: '15px', color: '#ffaaaa', align: 'center',
+      }).setOrigin(0.5));
+
+    // 取消按鈕
+    const cancelBg = this.add.rectangle(W / 2 - 110, H / 2 + 90, 180, 50, 0x333333)
+      .setStrokeStyle(2, 0xaaaaaa)
+      .setInteractive({ useHandCursor: true });
+    cancelBg.on('pointerdown', () => {
+      dlg.destroy();
+      this.resetDialogContainer = null;
+    });
+    cancelBg.on('pointerover',  () => cancelBg.setFillStyle(0x555555));
+    cancelBg.on('pointerout',   () => cancelBg.setFillStyle(0x333333));
+    dlg.add(cancelBg);
+    dlg.add(this.add.text(W / 2 - 110, H / 2 + 90, '取消', {
+      fontSize: '16px', color: '#cccccc',
+    }).setOrigin(0.5));
+
+    // 確認重置按鈕（明顯紅色）
+    const confirmBg = this.add.rectangle(W / 2 + 110, H / 2 + 90, 180, 50, 0x880000)
+      .setStrokeStyle(2, 0xff3333)
+      .setInteractive({ useHandCursor: true });
+    confirmBg.on('pointerdown', () => {
+      SaveManager.reset();
+      this.playerSave = SaveManager.load();
+      dlg.destroy();
+      this.resetDialogContainer = null;
+      this.goldText.setText(`💰 ${this.playerSave.gold}`);
+      this.renderContent();
+    });
+    confirmBg.on('pointerover',  () => confirmBg.setFillStyle(0xcc0000));
+    confirmBg.on('pointerout',   () => confirmBg.setFillStyle(0x880000));
+    dlg.add(confirmBg);
+    dlg.add(this.add.text(W / 2 + 110, H / 2 + 90, '確認重置', {
+      fontSize: '16px', color: '#ffffff', fontStyle: 'bold',
+    }).setOrigin(0.5));
   }
 }
